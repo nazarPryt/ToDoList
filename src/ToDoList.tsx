@@ -1,34 +1,29 @@
 import React from "react";
-import ToDoListHeader, {HeaderType} from "./ToDoListHeader";
+import HeaderToDoList from "./HeaderToDoList";
 
 export type TaskType = {
     title: string
+    id: number
     isDone: boolean
+    subject: string
+    btn: string
 }
-
 export type ToDoListType = {
-    title?: string
-    tasks: Array<TaskType>
-    val?: HeaderType
+    task: Array<TaskType>
 }
-
-function ToDoList (props: ToDoListType) {
-    return (
-        <div className="App">
-                <ToDoListHeader val={"hed"} />
-                <ul>
-                    <li><input type="checkbox" checked={props.tasks[0].isDone}/> <span>{props.tasks[0]}</span></li>
-                    <li><input type="checkbox" checked={props.tasks[1].isDone}/> <span>{props.tasks[1]}</span></li>
-                    <li><input type="checkbox" checked={props.tasks[2].isDone}/> <span>{props.tasks[2]}</span></li>
-                </ul>
-                <div>
-                    <button>All</button>
-                    <button>Active</button>
-                    <button>Completed</button>
-                </div>
-
+const ToDoList = (props: ToDoListType) => {
+    return <div>
+        <HeaderToDoList title={props.task[0].title}/>
+        <ul>
+            <li><input type="checkbox" checked={props.task[0].isDone}/> <span>{props.task[0].subject}</span></li>
+            <li><input type="checkbox" checked={props.task[1].isDone}/> <span>{props.task[1].subject}</span></li>
+            <li><input type="checkbox" checked={props.task[2].isDone}/> <span>{props.task[2].subject}</span></li>
+        </ul>
+        <div>
+            <button>{props.task[0].btn}</button>
+            <button>{props.task[1].btn}</button>
+            <button>{props.task[2].btn}</button>
         </div>
-    )
+    </div>
 }
-
-export default ToDoList;
+export default ToDoList
