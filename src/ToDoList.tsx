@@ -1,29 +1,22 @@
 import React from "react";
-import HeaderToDoList from "./HeaderToDoList";
+import Header from "./Header";
+import Buttons from "./Buttons";
+import BodyTodo from "./BodyTodo";
+import {filterValueType, TaskType} from "./App";
 
-export type TaskType = {
-    title: string
-    id: number
-    isDone: boolean
-    subject: string
-    btn: string
-}
-export type ToDoListType = {
+type ToDoListType = {
     task: Array<TaskType>
+    title: string
+    removeTask: (id: number)=> void
+    changeFilter: (value: filterValueType)=> void
 }
+
 const ToDoList = (props: ToDoListType) => {
     return <div>
-        <HeaderToDoList title={props.task[0].title}/>
-        <ul>
-            <li><input type="checkbox" checked={props.task[0].isDone}/> <span>{props.task[0].subject}</span></li>
-            <li><input type="checkbox" checked={props.task[1].isDone}/> <span>{props.task[1].subject}</span></li>
-            <li><input type="checkbox" checked={props.task[2].isDone}/> <span>{props.task[2].subject}</span></li>
-        </ul>
-        <div>
-            <button>{props.task[0].btn}</button>
-            <button>{props.task[1].btn}</button>
-            <button>{props.task[2].btn}</button>
-        </div>
+        <Header title={props.title} task={props.task}/>
+        <BodyTodo removeTask={props.removeTask} task={props.task}/>
+        <Buttons changeFilter={props.changeFilter}/>
+
     </div>
 }
-export default ToDoList
+export default ToDoList;
