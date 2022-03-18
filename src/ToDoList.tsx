@@ -2,20 +2,21 @@ import React from "react";
 import Header from "./Header";
 import Buttons from "./Buttons";
 import BodyTodo from "./BodyTodo";
-import {filterValueType, TaskType} from "./App";
+import {btnType, TaskType} from "./App";
 
 type ToDoListType = {
     task: Array<TaskType>
     title: string
-    removeTask: (id: number)=> void
-    changeFilter: (value: filterValueType)=> void
+    removeTask: (id: string) => void
+    filterTask: (value: btnType) => void
+    addTask: (titleTask: string) => void
 }
 
 const ToDoList = (props: ToDoListType) => {
     return <div>
-        <Header title={props.title} task={props.task}/>
+        <Header title={props.title} task={props.task} addTask={props.addTask}/>
         <BodyTodo removeTask={props.removeTask} task={props.task}/>
-        <Buttons changeFilter={props.changeFilter}/>
+        <Buttons filterTask={props.filterTask}/>
 
     </div>
 }

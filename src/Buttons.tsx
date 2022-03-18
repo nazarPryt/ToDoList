@@ -1,16 +1,16 @@
 import React from 'react';
-import {filterValueType} from "./App";
+import {btnType} from "./App";
 
 type ButtonsType = {
-    changeFilter: (value:filterValueType) => void
+    filterTask: (value: btnType) => void
 }
 
 const Buttons = (props: ButtonsType) => {
     return (
         <div>
-            <button onClick={ ()=>{props.changeFilter('All')} }>All</button>
-            <button onClick={ ()=>{props.changeFilter('Active')} }>Active</button>
-            <button onClick={ ()=>{props.changeFilter('Completed')}}>Completed</button>
+            <button onClick={ ()=>{props.filterTask('All')} }>All</button>
+            <button onClick={ ()=>{props.filterTask("Completed")} }>Completed</button>
+            <button onClick={ ()=>{props.filterTask("Active")} }>Active</button>
         </div>
     );
 };

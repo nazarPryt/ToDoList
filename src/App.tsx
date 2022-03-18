@@ -1,48 +1,59 @@
 import React, {useState} from 'react';
 import './App.css';
 import ToDoList from "./ToDoList";
+import {v1} from "uuid";
 
 export type TaskType = {
-    id: number
+    id: string
     isDone: boolean
     subject: string
 }
-export type filterValueType = 'All' | 'Completed' | 'Active'
+export type btnType = 'All' | 'Completed' | 'Active'
+///////////////////////////////////////////////////////////////////
 
 function App() {
 
-    let [taskOne, setTask] = useState([
-        {id: 1, isDone: true, subject: "HTML&CSS"},
-        {id: 2, isDone: true, subject: "JS"},
-        {id: 3, isDone: false, subject: "React"},
-        {id: 4, isDone: false, subject: "Redux"}])
-
-    let [filter, setFilter] = useState<filterValueType> ('All')
-
-    function removeTask (id: number) {
-        let filteredTask = taskOne.filter( t => t.id !== id)
-        setTask(filteredTask)
+    let [taskOne, setTask] = useState<Array<TaskType>>([
+        {id: v1(), isDone: true, subject: "HTML&CSS"},
+        {id: v1(), isDone: true, subject: "JS"},
+        {id: v1(), isDone: true, subject: "React"},
+        {id: v1(), isDone: false, subject: "Redux"}])
+    function removeTask (id: string){
+        let deletedTask = taskOne.filter( t => t.id !== id )
+        setTask(deletedTask)
     }
 
-    function changeFilter (value: filterValueType) {
+    let [filter, setFilter] = useState<btnType>('All')
+
+
+    let filteredTask = taskOne
+    if (filter === 'Completed'){
+        filteredTask = taskOne.filter( t =>t.isDone === true )
+
+    }
+    if (filter === 'Active'){
+        filteredTask = taskOne.filter( t =>t.isDone === false )
+
+    }
+    function filterTask (value: btnType){
         setFilter(value)
     }
 
-    let taskForTodoList = taskOne;
-    if (filter === 'Completed'){
-        taskForTodoList = taskOne.filter( t => t.isDone)
+    function addTask (titleTask: string){
+        let newTask: TaskType = {id: v1(), isDone: true, subject: titleTask}
+        setTask([newTask, ...taskOne])
     }
-    if (filter === 'Active'){
-        taskForTodoList = taskOne.filter( t => !t.isDone)
-    }
+
     return (
         <div className="App">
             <ToDoList
                 title={'What to learn'}
-                task={taskForTodoList}
+                task={filteredTask}
                 removeTask={removeTask}
-                changeFilter={changeFilter}
+                filterTask={filterTask}
+                addTask={addTask}
             />
         </div>
-    );}
+
+    )}
 export default App;
