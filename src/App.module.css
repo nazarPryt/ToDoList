@@ -1,0 +1,24 @@
+.contentWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.contentWrapper > div {
+  padding: 20px;
+}
+.createTodoWrapper {
+  text-align: center;
+  padding: 20px 0;
+}
+.createTodo {
+
+}
+.active {
+  background-color: cyan;
+}
+.error {
+  border: 2px solid red;
+}
+.errorMessage {
+  color: red;
+}
