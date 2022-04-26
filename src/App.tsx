@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import s from './App.module.css';
-import Todolist from "./Todolist";
+import Todolist from "./Todolist/Todolist";
 import {v1} from "uuid";
 
 import InputForm from "./InputForm";
@@ -76,14 +76,12 @@ function App() {
                 el.filter = value
             }
             return setToDoLists([...toDoLists])
-
         })
     }
     const deleteTodoList = (idTodo: string) => {
         let restOfTodoLists = toDoLists.filter( el => el.id !==idTodo)
         setToDoLists([...restOfTodoLists])
         delete taskObj[idTodo]
-        debugger;
     }
     const addItem = (inputValue: string) =>{
         let newTaskID = v1()
@@ -91,6 +89,20 @@ function App() {
         setToDoLists([newTodoList, ...toDoLists])
         let newTodoListTask = taskObj[newTaskID] = []
         setTaskObj({newTodoListTask,...taskObj})
+    }
+    const changeTitleTask = (idTodo: string, idTask: string, newValue: string) => {
+        let task = taskObj[idTodo].find(el => el.id === idTask)
+        if (task){
+            task.subject = newValue
+            return setTaskObj({...taskObj})
+        }
+    }
+    const changeTitleToDo = (idTodo: string, newValue: string) => {
+        let todo = toDoLists.find(el => el.id === idTodo)
+        if(todo){
+            todo.title = newValue
+            return setToDoLists([...toDoLists])
+        }
     }
 
 
@@ -122,7 +134,8 @@ function App() {
                     changeFilter={changeFilter}
                     filterValue={tl.filter}
                     deleteTodoList={deleteTodoList}
-                />
+                    changeTitleTask={changeTitleTask}
+                    changeTitleToDo={changeTitleToDo}/>
             })}
             </div>
         </div>
