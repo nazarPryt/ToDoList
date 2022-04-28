@@ -1,5 +1,6 @@
 import {taskObjType, TaskType} from "../App";
 import {v1} from "uuid";
+import {addNewTodoListAC, addNewTodoListAT} from "./todolist-reducer";
 
 type deleteTaskAT = {
     type: 'DELETE-TASK'
@@ -23,7 +24,7 @@ type changeTaskTitleAT = {
     newValue: string
 }
 
-type actionType = deleteTaskAT | addTaskAT | changeTaskStatusAT | changeTaskTitleAT
+type actionType = deleteTaskAT | addTaskAT | changeTaskStatusAT | changeTaskTitleAT | addNewTodoListAT
 
 export const taskReducer = (state: taskObjType, action: actionType): taskObjType => {
     switch (action.type) {
@@ -49,6 +50,10 @@ export const taskReducer = (state: taskObjType, action: actionType): taskObjType
                 task.subject = action.newValue
                 return{...state}}
             return{...state}
+        case "ADD-NEW-TO-DO-LIST":
+            const copy = {...state}
+            copy[action.idTodo] = []
+            return copy
         default:
             return {...state}
     }

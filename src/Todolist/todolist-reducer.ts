@@ -18,6 +18,7 @@ export type deleteTodoListAT = {
 export type addNewTodoListAT = {
     type: 'ADD-NEW-TO-DO-LIST'
     title: string
+    idTodo: string
 }
 
 
@@ -46,30 +47,18 @@ export const todolistReducer = (state: toDoListsType[], action: actionType): toD
             return([...restOfTodoLists])
             // delete taskObj[idTodo]
         case "ADD-NEW-TO-DO-LIST":
-            let newTaskID = v1()
-            let newTodoList: toDoListsType = {id: newTaskID,title: action.title, filter: 'all'}
+            let newTodoList: toDoListsType = {id: action.idTodo ,title: action.title, filter: 'all'}
             return([newTodoList, ...state])
-            // let newTodoListTask = taskObj[newTaskID] = []
-            // setTaskObj({newTodoListTask,...taskObj})
+
 
     }}
 
 export const changeFilterTaskAC = (idTodo: string, value: FilterType):changeFilterAT => ({type: 'CHANGE-FILTER-TASK', idTodo, value})
 export const changeTitleToDoAC = (idTodo: string, newValue: string):changeTitleToDoAT => ({type: 'CHANGE-TITLE-TODO-LIST',idTodo, newValue})
 export const deleteTodoListAC = (idTodo: string):deleteTodoListAT => ({type: 'DELETE-TO-DO-LIST', idTodo})
-export const addNewTodoListAC = (title: string): addNewTodoListAT => ({type: "ADD-NEW-TO-DO-LIST", title})
+export const addNewTodoListAC = (title: string): addNewTodoListAT => ({type: "ADD-NEW-TO-DO-LIST", title, idTodo: v1()})
 
 
 
 
-
-
-//     addTask: (idTodo: string, value: string) => void
-//     deleteTask: (idTodo: string, idTask: string) => void
-//     changeStatusTask: (idTodo: string, idTask: string) => void
-//     changeTitleTask: (idTodo: string, idTask: string, newValue: string) => void
-//     changeTitleToDo: (idTodo: string, newValue: string) => void
-//     changeFilter: (value: FilterType, idTodo: string) => void
-//     filterValue: FilterType
-//     deleteTodoList: (idTodo: number) => void
 
