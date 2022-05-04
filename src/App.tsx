@@ -1,9 +1,17 @@
-import React, {useState} from 'react';
+import React, {useReducer} from 'react';
 import s from './App.module.css';
 import Todolist from "./Todolist/Todolist";
 import {v1} from "uuid";
 
 import InputForm from "./InputForm";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC, taskReducer} from "./Todolist/task-reducer";
+import {
+    addNewTodoListAC,
+    changeFilterTaskAC,
+    changeTitleToDoAC,
+    deleteTodoListAC,
+    todolistReducer
+} from "./Todolist/todolist-reducer";
 
 export type TaskType = {
     id: string
@@ -25,7 +33,7 @@ function App() {
     const taskID_2 = v1()
     const taskID_3 = v1()
 
-    let [taskObj, setTaskObj] = useState<taskObjType>({
+    let [taskObj, dispatchTasks] = useReducer(taskReducer,{
         [taskID_1]:
             [
                 {id: v1(), isDone: true, subject: "HTML&CSS"},
@@ -45,64 +53,39 @@ function App() {
             ]
     })
 
-    let [toDoLists, setToDoLists] = useState<toDoListsType[]>([
+    let [toDoLists, dispatchToDoList] = useReducer(todolistReducer,[
         {id: taskID_1, title: "What to do", filter: 'all'},
         {id: taskID_2, title: "Something is done", filter: 'all'},
         {id: taskID_3, title: "Need to buy", filter: 'all'}
     ])
     const addTask = (idTodo: string, value: string) => {
-        let newTask: TaskType = {id: v1(), isDone: true, subject: value}
-        let newObj = [ newTask,...taskObj[idTodo]]
-        taskObj[idTodo] = newObj
-        setTaskObj({...taskObj})
+        dispatchTasks(addTaskAC(idTodo,value))
     }
     const deleteTask = (idTodo: string, idTask: string) => {
-        let restTasks = taskObj[idTodo].filter( el => el.id !== idTask)
-        taskObj[idTodo] = restTasks
-        setTaskObj({...taskObj})
+        dispatchTasks(deleteTaskAC(idTodo,idTask))
     }
-
-    const changeStatusTask = (idTodo: string, idTask: string) => {
-        taskObj[idTodo].find( el => {
-            if (el.id === idTask) {
-                el.isDone = !el.isDone
-            }
-            return setTaskObj({...taskObj})
-        })}
-
+    const changeTaskStatus = (idTodo: string, idTask: string) => {
+        console.log('changetask status')
+        dispatchTasks(changeTaskStatusAC(idTodo,idTask))
+    }
     const changeFilter =(idTodo: string, value: FilterType) => {
-        toDoLists.find(el => {
-            if (el.id === idTodo){
-                el.filter = value
-            }
-            return setToDoLists([...toDoLists])
-        })
+       dispatchToDoList(changeFilterTaskAC(idTodo,value))
     }
     const deleteTodoList = (idTodo: string) => {
-        let restOfTodoLists = toDoLists.filter( el => el.id !==idTodo)
-        setToDoLists([...restOfTodoLists])
-        delete taskObj[idTodo]
+        const action = deleteTodoListAC(idTodo)
+        dispatchTasks(action)
+        dispatchToDoList(action)
     }
-    const addItem = (inputValue: string) =>{
-        let newTaskID = v1()
-        let newTodoList: toDoListsType = {id: newTaskID,title: inputValue, filter: 'all'}
-        setToDoLists([newTodoList, ...toDoLists])
-        let newTodoListTask = taskObj[newTaskID] = []
-        setTaskObj({newTodoListTask,...taskObj})
+    const addNewToDoList = (inputValue: string) =>{
+        const action = addNewTodoListAC(inputValue)
+        dispatchTasks(action)
+        dispatchToDoList(action)
     }
     const changeTitleTask = (idTodo: string, idTask: string, newValue: string) => {
-        let task = taskObj[idTodo].find(el => el.id === idTask)
-        if (task){
-            task.subject = newValue
-            return setTaskObj({...taskObj})
-        }
+        dispatchTasks(changeTaskTitleAC(idTodo,idTask,newValue))
     }
     const changeTitleToDo = (idTodo: string, newValue: string) => {
-        let todo = toDoLists.find(el => el.id === idTodo)
-        if(todo){
-            todo.title = newValue
-            return setToDoLists([...toDoLists])
-        }
+        dispatchToDoList(changeTitleToDoAC(idTodo,newValue))
     }
 
 
@@ -111,7 +94,7 @@ function App() {
         <div className={s.app}>
             <div className={s.createTodoWrapper}>
                 <h1>Create New To Do List</h1>
-                <InputForm addItem={addItem}/>
+                <InputForm addItem={addNewToDoList}/>
             </div>
             <hr/>
             <hr/>
@@ -130,7 +113,7 @@ function App() {
                     taskObj={currentTask}
                     addTask={addTask}
                     deleteTask={deleteTask}
-                    changeStatusTask={changeStatusTask}
+                    changeStatusTask={changeTaskStatus}
                     changeFilter={changeFilter}
                     filterValue={tl.filter}
                     deleteTodoList={deleteTodoList}

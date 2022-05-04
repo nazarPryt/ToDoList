@@ -16,7 +16,7 @@ export type deleteTodoListAT = {
     idTodo: string
 }
 export type addNewTodoListAT = {
-    type: 'ADD-NEW-TO-DO-LIST'
+    type: "ADD-NEW-TO-DO-LIST"
     title: string
     idTodo: string
 }
@@ -28,24 +28,20 @@ export type actionType = changeTitleToDoAT | changeFilterAT | deleteTodoListAT |
 export const todolistReducer = (state: toDoListsType[], action: actionType): toDoListsType[] => {
     switch (action.type) {
         case "CHANGE-FILTER-TASK":
-            state.find(el => {
-                if (el.id === action.idTodo) {
-                    el.filter = action.value
+            let task = state.find(el => el.id === action.idTodo)
+                if (task) {
+                    task.filter = action.value
                 }
-            })
             return {...state};
-
         case "CHANGE-TITLE-TODO-LIST":
             let todo = state.find(el => el.id === action.idTodo)
             if (todo) {
                 todo.title = action.newValue
-
             }
             return {...state};
         case "DELETE-TO-DO-LIST":
-            let restOfTodoLists = state.filter( el => el.id !==action.idTodo)
+            let restOfTodoLists = state.filter( el => el.id !== action.idTodo)
             return([...restOfTodoLists])
-            // delete taskObj[idTodo]
         case "ADD-NEW-TO-DO-LIST":
             let newTodoList: toDoListsType = {id: action.idTodo ,title: action.title, filter: 'all'}
             return([newTodoList, ...state])

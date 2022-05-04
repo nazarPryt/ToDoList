@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React from 'react';
 import {FilterType, TaskType} from "../App";
 import s from '../App.module.css'
 import InputForm from "../InputForm";
@@ -56,7 +56,7 @@ function Todolist(props: TodolistType) {
                     const onClickHandler = () => {props.deleteTask(props.idTodo, el.id)}
                     const onChangeHandler = () => {props.changeStatusTask(props.idTodo, el.id)}
                     const changeInputHandler = (value: string) => {
-                        props.changeTitleTask(value, props.idTodo, el.id)
+                        props.changeTitleTask(props.idTodo, el.id, value)
                     }
 
                     return <li key={el.id}>
