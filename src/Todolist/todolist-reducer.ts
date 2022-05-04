@@ -26,25 +26,28 @@ export type actionType = changeTitleToDoAT | changeFilterAT | deleteTodoListAT |
 
 
 export const todolistReducer = (state: toDoListsType[], action: actionType): toDoListsType[] => {
+    let newState = JSON.stringify(state)
+    let copyState: toDoListsType[] = JSON.parse(newState)
+
     switch (action.type) {
         case "CHANGE-FILTER-TASK":
-            let task = state.find(el => el.id === action.idTodo)
+            let task = copyState.find(el => el.id === action.idTodo)
                 if (task) {
                     task.filter = action.value
                 }
-            return {...state};
+            return copyState;
         case "CHANGE-TITLE-TODO-LIST":
-            let todo = state.find(el => el.id === action.idTodo)
+            let todo = copyState.find(el => el.id === action.idTodo)
             if (todo) {
                 todo.title = action.newValue
             }
-            return {...state};
+            return copyState;
         case "DELETE-TO-DO-LIST":
-            let restOfTodoLists = state.filter( el => el.id !== action.idTodo)
+            let restOfTodoLists = copyState.filter( el => el.id !== action.idTodo)
             return([...restOfTodoLists])
         case "ADD-NEW-TO-DO-LIST":
             let newTodoList: toDoListsType = {id: action.idTodo ,title: action.title, filter: 'all'}
-            return([newTodoList, ...state])
+            return([newTodoList, ...copyState])
 
 
     }}

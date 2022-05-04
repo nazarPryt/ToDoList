@@ -21,6 +21,9 @@ type changeTaskStatusAT = {
 type actionType = deleteTaskAT | addTaskAT | changeTaskStatusAT | changeTaskTitleAT | addNewTodoListAT | deleteTodoListAT
 
 export const taskReducer = (state: taskObjType, action: actionType): taskObjType => {
+    let copyState = JSON.stringify(state)
+    let newState:taskObjType = JSON.parse(copyState)
+
     switch (action.type) {
         case "DELETE-TASK":
             let restTasks = state[action.idTodo].filter(el => el.id !== action.idTask)
@@ -32,13 +35,12 @@ export const taskReducer = (state: taskObjType, action: actionType): taskObjType
             state[action.idTodo] = newObj
             return {...state}
         case "CHANGE-TASK-STATUS":
-            let copyState = {...state}
-            let arr = copyState[action.idTodo]
+            let arr = newState[action.idTodo]
             let tas = arr.find(el => el.id === action.idTask)
             if (tas) {
                 tas.isDone = !tas.isDone
                 }
-            return {...copyState}
+            return newState
         case "CHANGE-TASK-TITLE":
             let task = state[action.idTodo].find(el => el.id === action.idTask)
             if (task){

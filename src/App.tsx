@@ -65,7 +65,6 @@ function App() {
         dispatchTasks(deleteTaskAC(idTodo,idTask))
     }
     const changeTaskStatus = (idTodo: string, idTask: string) => {
-        console.log('changetask status')
         dispatchTasks(changeTaskStatusAC(idTodo,idTask))
     }
     const changeFilter =(idTodo: string, value: FilterType) => {
