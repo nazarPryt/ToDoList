@@ -20,7 +20,31 @@ type changeTaskStatusAT = {
 
 type actionType = deleteTaskAT | addTaskAT | changeTaskStatusAT | changeTaskTitleAT | addNewTodoListAT | deleteTodoListAT
 
-export const taskReducer = (state: taskObjType, action: actionType): taskObjType => {
+export const taskID_1 = v1()
+export const taskID_2 = v1()
+export const taskID_3 = v1()
+
+const initialState: taskObjType = {
+    [taskID_1]:
+        [
+            {id: v1(), isDone: true, subject: "HTML&CSS"},
+            {id: v1(), isDone: true, subject: "JS"},
+            {id: v1(), isDone: false, subject: "React"},
+            {id: v1(), isDone: false, subject: "Redux"}
+        ],
+    [taskID_2]:
+        [
+            {id: v1(), isDone: true, subject: "Clean my house"},
+            {id: v1(), isDone: true, subject: "Have a rest"}
+        ],
+    [taskID_3]:
+        [
+            {id: v1(), isDone: true, subject: "Butter"},
+            {id: v1(), isDone: true, subject: "Milk"}
+        ]
+}
+
+export const taskReducer = (state = initialState, action: actionType): taskObjType => {
     let copyState = JSON.stringify(state)
     let newState:taskObjType = JSON.parse(copyState)
 
@@ -55,7 +79,7 @@ export const taskReducer = (state: taskObjType, action: actionType): taskObjType
             delete state[action.idTodo]
             return{...state}
         default:
-            return {...state}
+            return state
     }
 }
 
