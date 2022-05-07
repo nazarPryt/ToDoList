@@ -1,37 +1,23 @@
 import React, {ChangeEvent, useState} from 'react';
 
+
 type EditableSpanPropsType = {
-    title: string
-    changeValue: (value: string) => void
+    value: (newValue: string) => void
 }
 
-function EditableSpan (props: EditableSpanPropsType)  {
-    let [spanStatus, setSpanStatus] = useState<boolean>(true)
-    let [value, setValue] = useState<string>('')
+const EditableSpan = (props: EditableSpanPropsType) => {
 
-    const editStatusHandler = () => {
-        setSpanStatus(false)
-        setValue(props.title)
-    }
-    const makeChangesHandler = () => {
-        setSpanStatus(true)
-        props.changeValue(value)
-    }
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setValue(e.currentTarget.value)
-    }
-
-    return spanStatus
-        ? <span onDoubleClick={editStatusHandler}>{props.title}</span>
-        : <input
-            type="text"
-            autoFocus={true}
-            value={value}
-            onBlur={makeChangesHandler}
-            onChange={onChangeHandler}
-        />
+    const [newValue, setNewValue] = useState('')
 
 
-}
+    const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => setNewValue(e.currentTarget.value)
+    const onClickHandler = () => {props.value(newValue)}
+    return (
+        <div>
+            <input type="text" value={newValue} onChange={onChangeHandler}/>
+            <button onClick={onClickHandler}>+</button>
+        </div>
+    );
+};
 
 export default EditableSpan;

@@ -1,24 +1,17 @@
-.contentWrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.contentWrapper > div {
-  padding: 20px;
-}
-.createTodoWrapper {
-  text-align: center;
-  padding: 20px 0;
-}
-.createTodo {
 
+.header{
+    text-align: center;
+    padding: 20px 0;
 }
-.active {
-  background-color: cyan;
+.App {
+    display: flex;
+    }
+.App > div{
+    padding: 10px;
 }
-.error {
-  border: 2px solid red;
+
+.title {
+    display: flex;
+    align-items: center;
 }
-.errorMessage {
-  color: red;
-}
+
