@@ -1,4 +1,10 @@
-import {addNewTodolistAC, removeToDoListAC, todolistDataType, todolistReducer} from "./todolistReducer";
+import {
+    addNewTodolistAC, changeTodolistFilterAC,
+    changeToDoListTitleAC,
+    removeToDoListAC,
+    todolistDataType,
+    todolistReducer
+} from "./todolistReducer";
 
 
 let startState: todolistDataType[]
@@ -27,4 +33,22 @@ test('test ADD-NEW-TODOLIST', ()=>{
     expect(endState.length).toBe(4)
     expect(endState[0].title).toBe('nazar')
 
+})
+
+test('test CHANGE-TODOLIST-TITLE', () => {
+    const action = changeToDoListTitleAC('1', 'nazar')
+    const endState = todolistReducer(startState, action)
+
+    expect(endState[0].title).toBe('nazar')
+    expect(endState[1].title).toBe('Something is done')
+    expect(endState[2].title).toBe('Need to buy')
+})
+
+test('test to CHANGE-TODOLIST-FILTER', () => {
+    const action = changeTodolistFilterAC('1', 'completed')
+    const endState = todolistReducer(startState, action)
+
+    expect(endState[0].filter).toBe('completed')
+    expect(endState[1].filter).toBe('all')
+    expect(endState[2].filter).toBe('all')
 })
