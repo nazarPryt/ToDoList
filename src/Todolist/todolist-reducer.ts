@@ -31,28 +31,20 @@ const initialState: toDoListsType[] = [
 ]
 
 export const todolistReducer = (state = initialState, action: actionType): toDoListsType[] => {
-    let newState = JSON.stringify(state)
-    let copyState: toDoListsType[] = JSON.parse(newState)
-
     switch (action.type) {
         case "CHANGE-FILTER-TASK":
-            let task = copyState.find(el => el.id === action.idTodo)
-            if (task) {
-                task.filter = action.value
-            }
-            return copyState;
+            return [...state.map(td => td.id === action.idTodo
+                ? {...td, filter: action.value}
+                : td)]
         case "CHANGE-TITLE-TODO-LIST":
-            let todo = copyState.find(el => el.id === action.idTodo)
-            if (todo) {
-                todo.title = action.newValue
-            }
-            return copyState;
+            return [...state.map(td => td.id === action.idTodo
+                ? {...td, title: action.newValue}
+                : td)]
         case "DELETE-TO-DO-LIST":
-            let restOfTodoLists = copyState.filter(el => el.id !== action.idTodo)
-            return ([...restOfTodoLists])
+            return [...state.filter(td => td.id !== action.idTodo)]
         case "ADD-NEW-TO-DO-LIST":
             let newTodoList: toDoListsType = {id: action.idTodo, title: action.title, filter: 'all'}
-            return ([newTodoList, ...copyState])
+            return [newTodoList, ...state]
         default:
             return state
     }

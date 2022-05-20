@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import s from './App.module.css';
 import Todolist from "./Todolist/Todolist";
 
@@ -23,38 +23,38 @@ export type taskObjType = {
     [key: string]: Array<TaskType>
 }
 
-function App() {
+const App = React.memo(() => {
 
     const toDoLists = useSelector<rootReducerType, toDoListsType[]>(state => state.toDoList)
     const taskObj = useSelector<rootReducerType, taskObjType>(state => state.task)
     const dispatch = useDispatch()
 
 
-    const addTask = (idTodo: string, value: string) => {
+    const addTask = useCallback ((idTodo: string, value: string) => {
         dispatch(addTaskAC(idTodo,value))
-    }
-    const deleteTask = (idTodo: string, idTask: string) => {
+    }, [dispatch])
+    const deleteTask = useCallback ((idTodo: string, idTask: string) => {
         dispatch(deleteTaskAC(idTodo,idTask))
-    }
-    const changeTaskStatus = (idTodo: string, idTask: string) => {
+    }, [dispatch])
+    const changeTaskStatus = useCallback ((idTodo: string, idTask: string) => {
         dispatch(changeTaskStatusAC(idTodo,idTask))
-    }
-    const changeFilter =(idTodo: string, value: FilterType) => {
+    }, [dispatch])
+    const changeFilter =useCallback ((idTodo: string, value: FilterType) => {
         dispatch(changeFilterTaskAC(idTodo,value))
-    }
-    const deleteTodoList = (idTodo: string) => {
+    }, [dispatch])
+    const deleteTodoList = useCallback ((idTodo: string) => {
         dispatch(deleteTodoListAC(idTodo))
 
-    }
-    const addNewToDoList = (inputValue: string) =>{
+    }, [dispatch])
+    const addNewToDoList = useCallback ((inputValue: string) =>{
         dispatch(addNewTodoListAC(inputValue))
-    }
-    const changeTitleTask = (idTodo: string, idTask: string, newValue: string) => {
+    }, [])
+    const changeTitleTask = useCallback ((idTodo: string, idTask: string, newValue: string) => {
         dispatch(changeTaskTitleAC(idTodo,idTask,newValue))
-    }
-    const changeTitleToDo = (idTodo: string, newValue: string) => {
+    }, [dispatch])
+    const changeTitleToDo = useCallback( (idTodo: string, newValue: string) => {
         dispatch(changeTitleToDoAC(idTodo,newValue))
-    }
+    }, [dispatch])
 
 
 
@@ -92,6 +92,6 @@ function App() {
         </div>
 
     );
-}
+})
 
 export default App;
