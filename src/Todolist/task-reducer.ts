@@ -38,6 +38,7 @@ export const taskReducer = (state = initialState, action: actionType): taskObjTy
     switch (action.type) {
         case "DELETE-TASK":
             return {
+
                 ...state,
                 [action.idTodo]: [...state[action.idTodo].filter(task => task.id !== action.idTask)]
             }

@@ -33,6 +33,7 @@ const initialState: toDoListsType[] = [
 export const todolistReducer = (state = initialState, action: actionType): toDoListsType[] => {
     switch (action.type) {
         case "CHANGE-FILTER-TASK":
+
             return [...state.map(td => td.id === action.idTodo
                 ? {...td, filter: action.value}
                 : td)]
