@@ -3,35 +3,32 @@ import s from './App.module.css';
 import Todolist from "./Todolist/Todolist";
 
 import InputForm from "./InputForm";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC} from "./Todolist/task-reducer";
-import {addNewTodoListAC, changeFilterTaskAC, changeTitleToDoAC, deleteTodoListAC} from "./Todolist/todolist-reducer";
+import {changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC} from "./Todolist/task-reducer";
+import {
+    changeFilterTaskAC,
+    changeTitleToDoAC,
+    deleteTodoListAC,
+    FilterType,
+    ToDoListDomainType
+} from "./Todolist/todolist-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {rootReducerType} from "./Todolist/store";
+import {TaskStatuses, TaskType} from "./api/todoListAPI";
 
-export type TaskType = {
-    id: string
-    isDone: boolean
-    subject: string
-}
-export type FilterType = 'all' | 'completed' | 'active'
-export type toDoListsType = {
-    id: string
-    title: string
-    filter: FilterType
-}
+
 export type taskObjType = {
     [key: string]: Array<TaskType>
 }
 
 const App = React.memo(() => {
 
-    const toDoLists = useSelector<rootReducerType, toDoListsType[]>(state => state.toDoList)
+    const toDoLists = useSelector<rootReducerType, ToDoListDomainType[]>(state => state.toDoList)
     const taskObj = useSelector<rootReducerType, taskObjType>(state => state.task)
     const dispatch = useDispatch()
 
 
     const addTask = useCallback ((idTodo: string, value: string) => {
-        dispatch(addTaskAC(idTodo,value))
+        // dispatch(addTaskAC(idTodo,value))
     }, [dispatch])
     const deleteTask = useCallback ((idTodo: string, idTask: string) => {
         dispatch(deleteTaskAC(idTodo,idTask))
@@ -47,7 +44,7 @@ const App = React.memo(() => {
 
     }, [dispatch])
     const addNewToDoList = useCallback ((inputValue: string) =>{
-        dispatch(addNewTodoListAC(inputValue))
+        // dispatch(addNewTodoListAC(inputValue))
     }, [])
     const changeTitleTask = useCallback ((idTodo: string, idTask: string, newValue: string) => {
         dispatch(changeTaskTitleAC(idTodo,idTask,newValue))
@@ -71,8 +68,8 @@ const App = React.memo(() => {
             {toDoLists.map(tl => {
 
                 let currentTask = taskObj[tl.id]
-                if(tl.filter === 'active'){currentTask = currentTask.filter(el => el.isDone)}
-                if(tl.filter === 'completed'){currentTask = currentTask.filter(el => !el.isDone)}
+                if(tl.filter === 'active'){currentTask = currentTask.filter(el => el.status === TaskStatuses.New)}
+                if(tl.filter === 'completed'){currentTask = currentTask.filter(el => el.status === TaskStatuses.Completed)}
 
                 return <Todolist
                     key={tl.id}

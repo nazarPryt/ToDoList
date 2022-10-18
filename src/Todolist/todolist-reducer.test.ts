@@ -1,12 +1,13 @@
 import {v1} from "uuid";
-import {toDoListsType} from "../App";
+
 import {
-    addNewTodoListAC,
     changeFilterTaskAC,
     changeTitleToDoAC,
     deleteTodoListAC,
+    setToDoListsAC,
     todolistReducer
 } from "./todolist-reducer";
+import {ToDoListType} from "../api/todoListAPI";
 
 let taskID_1: string
 let taskID_2: string
@@ -47,10 +48,15 @@ test('test to delete todoList', () => {
     expect(endState.length).toBe(2)
 })
 
-test('test to add new TodoList', () => {
-    const newTodolistTitle = "nazar"
-    const endState = todolistReducer(initialState, addNewTodoListAC(newTodolistTitle))
-
-    expect(endState.length).toBe(4)
-    expect(endState[0].title).toBe('nazar')
+// test('test to add new TodoList', () => {
+//     const newTodolistTitle = "nazar"
+//     const endState = todolistReducer(initialState, addNewTodoListAC(newTodolistTitle))
+//
+//     expect(endState.length).toBe(4)
+//     expect(endState[0].title).toBe('nazar')
+// })
+test('test to Set TodoLists', () => {
+    const todo: ToDoListType[] = [{id: '1', title: 'bla', addedDate: 'e', order: 1},{id: '1', title: 'bla', addedDate: 'e', order: 1}]
+    const endState = todolistReducer([], setToDoListsAC(todo))
+    expect(endState.length).toBe(2)
 })

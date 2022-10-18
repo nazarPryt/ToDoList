@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect} from 'react';
-import {FilterType, TaskType} from "../App";
+import React, {useCallback} from 'react';
 import s from '../App.module.css'
 import InputForm from "../InputForm";
 import EditableSpan from "../EditableSpan";
 import Task from "../Task";
-import {todoListAPI} from "../api/todoListAPI";
+import {FilterType} from "./todolist-reducer";
+import {TaskType} from "../api/todoListAPI";
 
 type TodolistType = {
     idTodo: string
@@ -44,12 +44,7 @@ const Todolist = React.memo((props: TodolistType) => {
         props.changeTitleToDo(props.idTodo, value)
     }, [props.changeTitleToDo])
 
-    useEffect(() => {
-        todoListAPI.getTodolist()
-            .then((res) => {
-                !res.data ? console.log('is loading...') : console.log(res.data)
-            })
-    })
+
     console.log('todo rendered')
     return (
         <div>
