@@ -9,7 +9,7 @@ import {
     changeTitleToDoAC,
     deleteTodoListAC,
     fetchToDoListsTC,
-    FilterType
+    FilterType, updateToDoListTC
 } from "./Todolist/todolist-reducer";
 import {TaskStatuses, TaskType} from "./api/todoListAPI";
 import {useAppDispatch, useAppSelector} from "./Todolist/hooks";
@@ -28,7 +28,7 @@ const App = React.memo(() => {
 
     useEffect(() => {
         dispatch(fetchToDoListsTC())
-    },[])
+    },[dispatch])
 
 
     const addTask = useCallback((idTodo: string, value: string) => {
@@ -54,7 +54,7 @@ const App = React.memo(() => {
         dispatch(changeTaskTitleAC(idTodo, idTask, newValue))
     }, [dispatch])
     const changeTitleToDo = useCallback((idTodo: string, newValue: string) => {
-        dispatch(changeTitleToDoAC(idTodo, newValue))
+        dispatch(updateToDoListTC(idTodo, newValue))
     }, [dispatch])
 
 

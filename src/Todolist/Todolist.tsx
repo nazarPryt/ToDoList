@@ -2,7 +2,6 @@ import React, {useCallback} from 'react';
 import s from '../App.module.css'
 import InputForm from "../InputForm";
 import EditableSpan from "../EditableSpan";
-import Task from "../Task";
 import {deleteTodoListTC, FilterType} from "./todolist-reducer";
 import {TaskType} from "../api/todoListAPI";
 import {useAppDispatch} from "./hooks";

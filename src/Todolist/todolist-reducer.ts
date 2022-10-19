@@ -23,24 +23,20 @@ export const todolistReducer = (state = initialState, action: todolistActionType
             let newTodoList: ToDoListDomainType = {...action.toDoList, filter: 'all'}
             return [newTodoList, ...state]
         case 'SET-TO-DO-LISTS':
-            return action.ToDoLists.map(td => {return {...td, filter: 'all'}})
+            return action.ToDoLists.map(td => ({...td, filter: 'all'}))
         default:
-            return state
+            return [...state]
     }
 }
 
-export const changeFilterTaskAC = (idTodo: string, value: FilterType) => ({
-    type: 'CHANGE-FILTER-TASK',
-    idTodo,
-    value
-}) as const
+export const changeFilterTaskAC = (idTodo: string, value: FilterType) => ({type: 'CHANGE-FILTER-TASK', idTodo, value}) as const
 export const changeTitleToDoAC = (idTodo: string, newValue: string) => ({
     type: 'CHANGE-TITLE-TODO-LIST',
     idTodo,
     newValue
 }) as const
 export const deleteTodoListAC = (idTodo: string) => ({type: 'DELETE-TO-DO-LIST', idTodo}) as const
-export const addNewTodoListAC = (toDoList: ToDoListType) => ({type: "ADD-NEW-TO-DO-LIST", toDoList}) as const //подивитись чи треба відправляти таску чи title
+export const addNewTodoListAC = (toDoList: ToDoListType) => ({type: "ADD-NEW-TO-DO-LIST", toDoList}) as const
 export const setToDoListsAC = (ToDoLists: ToDoListType[]) => ({type: 'SET-TO-DO-LISTS', ToDoLists}) as const
 
 
@@ -49,29 +45,35 @@ export const setToDoListsAC = (ToDoLists: ToDoListType[]) => ({type: 'SET-TO-DO-
 export const fetchToDoListsTC = (): AppThunkType => async dispatch => {
     try {
         const res = await todoListAPI.getTodolist()
-        dispatch(setToDoListsAC(res.data.data))
+        dispatch(setToDoListsAC(res.data))
     } catch (e) {
         console.warn(e)
     }
 }
-
 export const addNewTodoListTC = (title: string): AppThunkType => async dispatch => {
     try {
         const res = await todoListAPI.createNewToDoList(title)
         dispatch(addNewTodoListAC(res.data.data.item))
     } catch (e) {
-        console.log(e)
+        console.warn(e)
     }
 }
 export const deleteTodoListTC = (todolistID: string): AppThunkType => async dispatch => {
     try {
-        const res = todoListAPI.deleteTodoList(todolistID)
+        const res = await todoListAPI.deleteTodoList(todolistID)
         dispatch(deleteTodoListAC(todolistID))
     } catch (e) {
-        console.log(e)
+        console.warn(e)
     }
 }
-
+export const updateToDoListTC = (todoListID: string, title: string): AppThunkType => async dispatch => {
+    try {
+        const res = todoListAPI.updateToDoList(todoListID, title)
+        dispatch(changeTitleToDoAC(todoListID, title))
+    } catch (e) {
+        console.warn(e)
+    }
+}
 
 
 
