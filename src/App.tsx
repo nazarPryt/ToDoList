@@ -2,22 +2,19 @@ import React, {useCallback, useEffect} from 'react';
 import s from './App.module.css';
 import Todolist from "./Todolist/Todolist";
 import InputForm from "./InputForm";
-import {changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC} from "./Todolist/task-reducer";
+import {deleteTaskAC} from "./Todolist/task-reducer";
 import {
     addNewTodoListTC,
     changeFilterTaskAC,
-    changeTitleToDoAC,
     deleteTodoListAC,
     fetchToDoListsTC,
-    FilterType, updateToDoListTC
+    FilterType,
+    updateToDoListTC
 } from "./Todolist/todolist-reducer";
-import {TaskStatuses, TaskType} from "./api/todoListAPI";
 import {useAppDispatch, useAppSelector} from "./Todolist/hooks";
+import Test from "./api/test";
 
 
-export type taskObjType = {
-    [key: string]: Array<TaskType>
-}
 
 const App = React.memo(() => {
 
@@ -38,7 +35,7 @@ const App = React.memo(() => {
         dispatch(deleteTaskAC(idTodo, idTask))
     }, [dispatch])
     const changeTaskStatus = useCallback((idTodo: string, idTask: string) => {
-        dispatch(changeTaskStatusAC(idTodo, idTask))
+        // dispatch(changeTaskStatusAC(idTodo, idTask))
     }, [dispatch])
     const changeFilter = useCallback((idTodo: string, value: FilterType) => {
         dispatch(changeFilterTaskAC(idTodo, value))
@@ -51,7 +48,7 @@ const App = React.memo(() => {
         dispatch(addNewTodoListTC(inputValue))
     }, [])
     const changeTitleTask = useCallback((idTodo: string, idTask: string, newValue: string) => {
-        dispatch(changeTaskTitleAC(idTodo, idTask, newValue))
+        // dispatch(changeTaskTitleAC(idTodo, idTask, newValue))
     }, [dispatch])
     const changeTitleToDo = useCallback((idTodo: string, newValue: string) => {
         dispatch(updateToDoListTC(idTodo, newValue))
@@ -60,6 +57,7 @@ const App = React.memo(() => {
 
     return (
         <div className={s.app}>
+            <Test/>
             <div className={s.createTodoWrapper}>
                 <h1>Create New To Do List</h1>
                 <InputForm addItem={addNewToDoList}/>
@@ -70,19 +68,19 @@ const App = React.memo(() => {
 
                 {toDoLists.map(tl => {
 
-                    let currentTask = taskObj[tl.id]
-                    if (tl.filter === 'active') {
-                        currentTask = currentTask.filter(el => el.status === TaskStatuses.New)
-                    }
-                    if (tl.filter === 'completed') {
-                        currentTask = currentTask.filter(el => el.status === TaskStatuses.Completed)
-                    }
+                    // let currentTask = taskObj[tl.id]
+                    // if (tl.filter === 'active') {
+                    //     currentTask = currentTask.filter(el => el.status === TaskStatuses.New)
+                    // }
+                    // if (tl.filter === 'completed') {
+                    //     currentTask = currentTask.filter(el => el.status === TaskStatuses.Completed)
+                    // }
 
                     return <Todolist
                         key={tl.id}
                         idTodo={tl.id}
                         title={tl.title}
-                        taskObj={currentTask}
+                        taskObj={taskObj[tl.id]}
                         addTask={addTask}
                         deleteTask={deleteTask}
                         changeStatusTask={changeTaskStatus}

@@ -19,13 +19,16 @@ export const todoListAPI = {
     updateToDoList (todoListID: string, title: string) {
         return instance.put(`/todo-lists/${todoListID}`,{title})},
     getTasks(todoListID: string) {
-        return instance.get(`/todo-lists/${todoListID}/tasks`)}
+        return instance.get<GetTasksResponseType>(`/todo-lists/${todoListID}/tasks`)},
+    createNewTask(todoListID: string, title: string) {
+        return instance.post<PostTaskResponseType<{item: TaskType}>>(`/todo-lists/${todoListID}/tasks`, {title})
+    }
 
 }
 
 
 
-
+///////   ToDoLists Types     ///////
 export type ToDoListType = {
     id: string
     title: string
@@ -37,6 +40,8 @@ type ResponseType<D = {}> = {
     messages: string[]
     data: D
 }
+
+///////   Tasks Types     ///////
 export enum TaskStatuses {
     New = 0,
     InProgress = 1,
@@ -62,4 +67,15 @@ export type TaskType = {
     todoListId: string
     order: number
     addedDate: string
+}
+type GetTasksResponseType = {
+    totalCount: number
+    error: string
+    Items: TaskType[]
+}
+type PostTaskResponseType<D = {}> = {
+    fieldsErrors : string[]
+    messages: string []
+    resultCode: number
+    data: D
 }

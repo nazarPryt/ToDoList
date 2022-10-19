@@ -1,10 +1,13 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import s from '../App.module.css'
 import InputForm from "../InputForm";
 import EditableSpan from "../EditableSpan";
 import {deleteTodoListTC, FilterType} from "./todolist-reducer";
-import {TaskType} from "../api/todoListAPI";
 import {useAppDispatch} from "./hooks";
+import {createNewTaskTC, setTasksTC, taskObjType} from "./task-reducer";
+import Task from "../Task";
+import {TaskType} from "../api/todoListAPI";
+import {log} from "util";
 
 type TodolistType = {
     idTodo: string
@@ -24,9 +27,13 @@ type TodolistType = {
 const Todolist = React.memo((props: TodolistType) => {
     const dispatch = useAppDispatch()
 
+    useEffect(() => {
+        dispatch(setTasksTC(props.idTodo))
+    }, [dispatch])
+
     const deleteTodoListHandler = useCallback(() => {
         dispatch(deleteTodoListTC(props.idTodo))
-    },[dispatch, props.idTodo])
+    }, [dispatch, props.idTodo])
 
     const allFilterHandler = () => {
         props.changeFilter(props.idTodo, 'all')
@@ -38,9 +45,9 @@ const Todolist = React.memo((props: TodolistType) => {
         props.changeFilter(props.idTodo, 'completed')
     }
 
-    const addItem = useCallback((inputValue: string) => {
-        props.addTask(props.idTodo, inputValue)
-    }, [])
+    const createNewTaskHandler = useCallback((inputValue: string) => {
+        dispatch(createNewTaskTC(props.idTodo, inputValue))
+    }, [dispatch])
 
     const changeInputValueHandler = useCallback((value: string) => {
         props.changeTitleToDo(props.idTodo, value)
@@ -55,18 +62,20 @@ const Todolist = React.memo((props: TodolistType) => {
                 <button onClick={deleteTodoListHandler}>X</button>
             </h1>
 
-            <InputForm addItem={addItem}/>
+            <InputForm addItem={createNewTaskHandler}/>
 
-            {/*<ul>*/}
-            {/*    {props.taskObj.map(el => <Task*/}
-            {/*        key={el.id}*/}
-            {/*        task={el}*/}
-            {/*        deleteTask={props.deleteTask}*/}
-            {/*        idTodo={props.idTodo}*/}
-            {/*        changeStatusTask={props.changeStatusTask}*/}
-            {/*        changeTitleTask={props.changeTitleTask}*/}
-            {/*    />)}*/}
-            {/*</ul>*/}
+            <ul>
+
+                {/*{props.taskObj.map(el =>*/}
+                {/*    <Task*/}
+                {/*        key={el.id}*/}
+                {/*        task={el}*/}
+                {/*        deleteTask={props.deleteTask}*/}
+                {/*        idTodo={props.idTodo}*/}
+                {/*        changeStatusTask={props.changeStatusTask}*/}
+                {/*        changeTitleTask={props.changeTitleTask}*/}
+                {/*    />)}*/}
+            </ul>
             <button className={props.filterValue === 'all' ? s.active : ''} onClick={allFilterHandler}>All</button>
             <button className={props.filterValue === 'active' ? s.active : ''} onClick={activeFilterHandler}>Active
             </button>
