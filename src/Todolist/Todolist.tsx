@@ -3,8 +3,9 @@ import s from '../App.module.css'
 import InputForm from "../InputForm";
 import EditableSpan from "../EditableSpan";
 import Task from "../Task";
-import {FilterType} from "./todolist-reducer";
+import {deleteTodoListTC, FilterType} from "./todolist-reducer";
 import {TaskType} from "../api/todoListAPI";
+import {useAppDispatch} from "./hooks";
 
 type TodolistType = {
     idTodo: string
@@ -22,9 +23,11 @@ type TodolistType = {
 
 
 const Todolist = React.memo((props: TodolistType) => {
+    const dispatch = useAppDispatch()
+
     const deleteTodoListHandler = useCallback(() => {
-        props.deleteTodoList(props.idTodo)
-    },[props.deleteTodoList, props.idTodo])
+        dispatch(deleteTodoListTC(props.idTodo))
+    },[dispatch, props.idTodo])
 
     const allFilterHandler = () => {
         props.changeFilter(props.idTodo, 'all')
@@ -55,16 +58,16 @@ const Todolist = React.memo((props: TodolistType) => {
 
             <InputForm addItem={addItem}/>
 
-            <ul>
-                {props.taskObj.map(el => <Task
-                    key={el.id}
-                    task={el}
-                    deleteTask={props.deleteTask}
-                    idTodo={props.idTodo}
-                    changeStatusTask={props.changeStatusTask}
-                    changeTitleTask={props.changeTitleTask}
-                />)}
-            </ul>
+            {/*<ul>*/}
+            {/*    {props.taskObj.map(el => <Task*/}
+            {/*        key={el.id}*/}
+            {/*        task={el}*/}
+            {/*        deleteTask={props.deleteTask}*/}
+            {/*        idTodo={props.idTodo}*/}
+            {/*        changeStatusTask={props.changeStatusTask}*/}
+            {/*        changeTitleTask={props.changeTitleTask}*/}
+            {/*    />)}*/}
+            {/*</ul>*/}
             <button className={props.filterValue === 'all' ? s.active : ''} onClick={allFilterHandler}>All</button>
             <button className={props.filterValue === 'active' ? s.active : ''} onClick={activeFilterHandler}>Active
             </button>

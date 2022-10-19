@@ -1,6 +1,7 @@
 import React from 'react';
 import EditableSpan from "./EditableSpan";
-import {TaskType} from "./App";
+import {TaskStatuses, TaskType} from "./api/todoListAPI";
+
 
 
 type TaskPropsType = {
@@ -21,8 +22,8 @@ const Task = React.memo((props: TaskPropsType) => {
 
 
     return <li>
-        <input type="checkbox" onChange={onChangeHandler} checked={props.task.isDone}/>
-        <EditableSpan title={props.task.subject} changeValue={changeInputHandler}/>
+        <input type="checkbox" onChange={onChangeHandler} checked={props.task.status === TaskStatuses.Completed}/>
+        <EditableSpan title={props.task.title} changeValue={changeInputHandler}/>
         <button onClick={onClickHandler}>X</button>
     </li>
 });
