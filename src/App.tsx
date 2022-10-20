@@ -24,7 +24,7 @@ const App = React.memo(() => {
 
 
     useEffect(() => {
-        dispatch(fetchToDoListsTC())
+        dispatch(fetchToDoListsTC()) //  ok
     },[dispatch])
 
 
@@ -80,7 +80,7 @@ const App = React.memo(() => {
                         key={tl.id}
                         idTodo={tl.id}
                         title={tl.title}
-                        taskObj={taskObj[tl.id]}
+                        taskObj={taskObj}
                         addTask={addTask}
                         deleteTask={deleteTask}
                         changeStatusTask={changeTaskStatus}

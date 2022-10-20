@@ -71,7 +71,7 @@ export type TaskType = {
 type GetTasksResponseType = {
     totalCount: number
     error: string
-    Items: TaskType[]
+    items: TaskType[]
 }
 type PostTaskResponseType<D = {}> = {
     fieldsErrors : string[]

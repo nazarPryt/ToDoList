@@ -1,9 +1,10 @@
 import {TaskType, todoListAPI} from "../api/todoListAPI";
 import {AppThunkType} from "./store";
+import {addNewTodoListAC, setToDoListsAC} from "./todolist-reducer";
 
 export type taskActionType =
-    // | ReturnType<typeof setToDoListsAC>
-    // | ReturnType<typeof addNewTodoListAC>
+    | ReturnType<typeof setToDoListsAC>
+    | ReturnType<typeof addNewTodoListAC>
     // | ReturnType<typeof deleteTodoListAC>
     | ReturnType<typeof deleteTaskAC>
     | ReturnType<typeof createNewTaskAC>
@@ -40,11 +41,8 @@ export const taskReducer = (state = initialState, action: taskActionType): taskO
         //             }
         //             : task)
         //     }
-        // case "ADD-NEW-TO-DO-LIST":
-        //     return {
-        //         ...state,
-        //         [action.idTodo]: []
-        //     }
+        case "ADD-NEW-TO-DO-LIST":
+            return {...state, [action.toDoList.id]: []}    // ok
         // case "DELETE-TO-DO-LIST":
         //     delete state[action.]
         //     return {...state}
@@ -61,10 +59,20 @@ export const taskReducer = (state = initialState, action: taskActionType): taskO
         //     return {...state,
         //         [action.toDoList.id] : tas
         //     }
-        case 'SET-TASKS':
-            return {...state, [action.todoListID]: [...action.tasks]}
-        case "CREATE-NEW-TASK":
-            return {...state, [action.todoListID] : [{...action.tasks}, ...state[action.todoListID]]}
+        case 'SET-TASKS': //  ok
+            console.log(action,"-action")
+            return {...state, [action.todoListID]: action.tasks}
+        case "CREATE-NEW-TASK":  //  ok
+            const neWTask = action.task
+            return {...state, [action.task.todoListId] : [neWTask, ...state[action.todoListID]]}
+        case 'SET-TO-DO-LISTS':  //  ok
+            const copyState = {...state}
+                action.ToDoLists.forEach(tl => {
+                    copyState[tl.id] = [];
+                })
+                return state
+
+
         default:
             return state
     }
@@ -72,10 +80,10 @@ export const taskReducer = (state = initialState, action: taskActionType): taskO
 
 
 export const deleteTaskAC = (idTodo: string, idTask: string) => ({type: 'DELETE-TASK', idTask, idTodo} as const)
-export const createNewTaskAC = (todoListID: string, tasks: TaskType) => ({
+export const createNewTaskAC = (todoListID: string, task: TaskType) => ({
     type: 'CREATE-NEW-TASK',
     todoListID,
-    tasks
+    task
 } as const)
 export const changeTaskStatusAC = (idTodo: string, idTask: string) => ({
     type: "CHANGE-TASK-STATUS",
@@ -91,11 +99,14 @@ export const changeTaskTitleAC = (idTodo: string, idTask: string, newValue: stri
 export const setTasksAC = (tasks: TaskType[], todoListID: string) => ({type: 'SET-TASKS', todoListID, tasks}) as const
 
 
+
+
 ///////   Thunk     ///////
 export const setTasksTC = (todoListID: string): AppThunkType => async dispatch => {
     try {
         const res = await todoListAPI.getTasks(todoListID)
-        dispatch(setTasksAC(res.data.Items, todoListID))
+        console.log(res,"-res")
+        dispatch(setTasksAC(res.data.items, todoListID))
     } catch (e) {
         console.warn(e)
     }
