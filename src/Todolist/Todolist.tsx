@@ -6,21 +6,19 @@ import {deleteTodoListTC, FilterType} from "./todolist-reducer";
 import {useAppDispatch} from "./hooks";
 import {createNewTaskTC, setTasksTC, taskObjType} from "./task-reducer";
 import Task from "../Task";
+import {TaskStatuses} from "../api/todoListAPI";
 
 type TodolistType = {
     idTodo: string
     title: string
     taskObj: taskObjType
-    addTask: (idTodo: string, value: string) => void
     deleteTask: (idTodo: string, idTask: string) => void
-    changeStatusTask: (idTodo: string, idTask: string) => void
+    changeStatusTask: (idTodo: string, idTask: string, status: TaskStatuses) => void
     changeTitleTask: (idTodo: string, idTask: string, newValue: string) => void
     changeTitleToDo: (idTodo: string, newValue: string) => void
     changeFilter: (idTodo: string, value: FilterType) => void
     filterValue: FilterType
-    deleteTodoList: (idTodo: string) => void
 }
-
 
 const Todolist = React.memo((props: TodolistType) => {
     const dispatch = useAppDispatch()
@@ -80,5 +78,4 @@ const Todolist = React.memo((props: TodolistType) => {
         </div>
     )
 })
-
 export default Todolist;

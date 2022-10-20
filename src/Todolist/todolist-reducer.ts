@@ -1,7 +1,6 @@
 import {todoListAPI, ToDoListType} from "../api/todoListAPI";
 import {AppThunkType} from "./store";
 
-
 export type todolistActionType =
     | ReturnType<typeof changeTitleToDoAC>
     | ReturnType<typeof changeFilterTaskAC>
@@ -28,7 +27,7 @@ export const todolistReducer = (state = initialState, action: todolistActionType
             return [...state]
     }
 }
-
+///////   Actions     ///////
 export const changeFilterTaskAC = (idTodo: string, value: FilterType) => ({type: 'CHANGE-FILTER-TASK', idTodo, value}) as const
 export const changeTitleToDoAC = (idTodo: string, newValue: string) => ({
     type: 'CHANGE-TITLE-TODO-LIST',
@@ -38,7 +37,6 @@ export const changeTitleToDoAC = (idTodo: string, newValue: string) => ({
 export const deleteTodoListAC = (idTodo: string) => ({type: 'DELETE-TO-DO-LIST', idTodo}) as const
 export const addNewTodoListAC = (toDoList: ToDoListType) => ({type: "ADD-NEW-TO-DO-LIST", toDoList}) as const
 export const setToDoListsAC = (ToDoLists: ToDoListType[]) => ({type: 'SET-TO-DO-LISTS', ToDoLists}) as const
-
 
 
 ///////   Thunk     ///////
@@ -74,8 +72,6 @@ export const updateToDoListTC = (todoListID: string, title: string): AppThunkTyp
         console.warn(e)
     }
 }
-
-
 
 
 ///////   Types     ///////
