@@ -2,7 +2,7 @@ import React, {useCallback, useEffect} from 'react';
 import s from './App.module.css';
 import Todolist from "./Todolist/Todolist";
 import InputForm from "./InputForm";
-import {deleteTaskAC} from "./Todolist/task-reducer";
+import {deleteTaskTC} from "./Todolist/task-reducer";
 import {
     addNewTodoListTC,
     changeFilterTaskAC,
@@ -12,8 +12,6 @@ import {
     updateToDoListTC
 } from "./Todolist/todolist-reducer";
 import {useAppDispatch, useAppSelector} from "./Todolist/hooks";
-import Test from "./api/test";
-
 
 
 const App = React.memo(() => {
@@ -31,8 +29,8 @@ const App = React.memo(() => {
     const addTask = useCallback((idTodo: string, value: string) => {
         // dispatch(addTaskAC(idTodo,value))
     }, [dispatch])
-    const deleteTask = useCallback((idTodo: string, idTask: string) => {
-        dispatch(deleteTaskAC(idTodo, idTask))
+    const deleteTask = useCallback((todolistId: string, taskId: string) => {
+        dispatch(deleteTaskTC(todolistId, taskId))
     }, [dispatch])
     const changeTaskStatus = useCallback((idTodo: string, idTask: string) => {
         // dispatch(changeTaskStatusAC(idTodo, idTask))
@@ -57,7 +55,6 @@ const App = React.memo(() => {
 
     return (
         <div className={s.app}>
-            <Test/>
             <div className={s.createTodoWrapper}>
                 <h1>Create New To Do List</h1>
                 <InputForm addItem={addNewToDoList}/>

@@ -57,13 +57,10 @@ const Todolist = React.memo((props: TodolistType) => {
                 <EditableSpan title={props.title} changeValue={changeInputValueHandler}/>
                 <button onClick={deleteTodoListHandler}>X</button>
             </h1>
-
             <InputForm addItem={createNewTaskHandler}/>
-
             <ul>
                 {props.taskObj[props.idTodo] &&
                     props.taskObj[props.idTodo].map(el =>
-                    <li>
                         <Task
                             key={el.id}
                             task={el}
@@ -72,8 +69,7 @@ const Todolist = React.memo((props: TodolistType) => {
                             changeStatusTask={props.changeStatusTask}
                             changeTitleTask={props.changeTitleTask}
                         />
-                    </li>
-                )}
+                    )}
             </ul>
             <button className={props.filterValue === 'all' ? s.active : ''} onClick={allFilterHandler}>All</button>
             <button className={props.filterValue === 'active' ? s.active : ''} onClick={activeFilterHandler}>Active

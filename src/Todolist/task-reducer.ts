@@ -20,8 +20,8 @@ const initialState: taskObjType = {}
 export const taskReducer = (state = initialState, action: taskActionType): taskObjType => {
 
     switch (action.type) {
-        // case "DELETE-TASK":
-        //     return {...state, [action.idTodo]: [...state[action.idTodo].filter(task => task.id !== action.idTask)]}
+        case "DELETE-TASK":
+            return {...state, [action.todolistId]: [...state[action.todolistId].filter(task => task.id !== action.taskId)]}
         // case "ADD-TASK":
         //     let newTask: TaskType = action.tasks
         //     return {...state, [action.idTodo]: [newTask, ...state[action.idTodo]]}
@@ -60,7 +60,6 @@ export const taskReducer = (state = initialState, action: taskActionType): taskO
         //         [action.toDoList.id] : tas
         //     }
         case 'SET-TASKS': //  ok
-            console.log(action,"-action")
             return {...state, [action.todoListID]: action.tasks}
         case "CREATE-NEW-TASK":  //  ok
             const neWTask = action.task
@@ -79,7 +78,7 @@ export const taskReducer = (state = initialState, action: taskActionType): taskO
 }
 
 
-export const deleteTaskAC = (idTodo: string, idTask: string) => ({type: 'DELETE-TASK', idTask, idTodo} as const)
+export const deleteTaskAC = (todolistId: string, taskId: string) => ({type: 'DELETE-TASK', todolistId, taskId} as const)
 export const createNewTaskAC = (todoListID: string, task: TaskType) => ({
     type: 'CREATE-NEW-TASK',
     todoListID,
@@ -105,7 +104,6 @@ export const setTasksAC = (tasks: TaskType[], todoListID: string) => ({type: 'SE
 export const setTasksTC = (todoListID: string): AppThunkType => async dispatch => {
     try {
         const res = await todoListAPI.getTasks(todoListID)
-        console.log(res,"-res")
         dispatch(setTasksAC(res.data.items, todoListID))
     } catch (e) {
         console.warn(e)
@@ -118,8 +116,14 @@ export const createNewTaskTC = (todoListID: string, title: string): AppThunkType
     } catch (e) {
         console.log(e)
     }
-
 }
-
+export const deleteTaskTC = (todolistId: string, taskId: string): AppThunkType => async dispatch => {
+    try {
+        const res = await todoListAPI.deleteTask(todolistId,taskId)
+        dispatch(deleteTaskAC(todolistId, taskId))
+    } catch (e) {
+        console.warn(e)
+    }
+}
 
 
