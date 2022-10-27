@@ -1,6 +1,7 @@
 import {TaskPriorities, TaskStatuses, TaskType, todoListAPI, updateTaskModelType} from "../api/todoListAPI";
 import {AppThunkType} from "./store";
 import {addNewTodoListAC, deleteTodoListAC, setToDoListsAC} from "./todolist-reducer";
+import {ChangeAppStatusAC} from "./app-reducer";
 
 export type taskActionType =
     | ReturnType<typeof setToDoListsAC>
@@ -70,25 +71,34 @@ export const updateTaskAC = (todolistId: string, taskId: string, model: updateDo
 ///////   Thunk     ///////
 export const setTasksTC = (todoListID: string): AppThunkType => async dispatch => {
     try {
+        dispatch(ChangeAppStatusAC('loading'))
         const res = await todoListAPI.getTasks(todoListID)
+        dispatch(ChangeAppStatusAC('succeed'))
         dispatch(setTasksAC(res.data.items, todoListID))
     } catch (e) {
+        dispatch(ChangeAppStatusAC('failed'))
         console.warn(e)
     }
 }
 export const createNewTaskTC = (todoListID: string, title: string): AppThunkType => async dispatch => {
     try {
+        dispatch(ChangeAppStatusAC('loading'))
         const res = await todoListAPI.createNewTask(todoListID, title)
+        dispatch(ChangeAppStatusAC('succeed'))
         dispatch(createNewTaskAC(todoListID, res.data.data.item))
     } catch (e) {
+        dispatch(ChangeAppStatusAC('failed'))
         console.log(e)
     }
 }
 export const deleteTaskTC = (todolistId: string, taskId: string): AppThunkType => async dispatch => {
     try {
+        dispatch(ChangeAppStatusAC('loading'))
         const res = await todoListAPI.deleteTask(todolistId, taskId)
+        dispatch(ChangeAppStatusAC('succeed'))
         dispatch(deleteTaskAC(todolistId, taskId))
     } catch (e) {
+        dispatch(ChangeAppStatusAC('failed'))
         console.warn(e)
     }
 }

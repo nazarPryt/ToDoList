@@ -12,6 +12,9 @@ import {
 } from "./Todolist/todolist-reducer";
 import {useAppDispatch, useAppSelector} from "./Todolist/hooks";
 import {TaskStatuses, updateTaskModelType} from "./api/todoListAPI";
+import LinearProgress from "@mui/material/LinearProgress";
+import {Alert} from "@mui/material";
+import {CustomizedSnackbars} from "./Todolist/ErrorSnackBar/ErrorSnackBar";
 
 
 const App = React.memo(() => {
@@ -19,6 +22,9 @@ const App = React.memo(() => {
     const toDoLists = useAppSelector(state => state.toDoList)
     const taskObj = useAppSelector(state => state.task)
     const dispatch = useAppDispatch()
+    const status = useAppSelector(state => state.app.status)
+    const error = useAppSelector(state => state.app.error)
+
 
     useEffect(() => {
         dispatch(fetchToDoListsTC()) //  ok
@@ -51,6 +57,7 @@ const App = React.memo(() => {
             </div>
             <hr/>
             <hr/>
+            { status === "loading" && <LinearProgress />}
             <div className={s.contentWrapper}>
                 {toDoLists.map(tl => {
                     // let currentTask = taskObj[tl.id]
@@ -73,6 +80,8 @@ const App = React.memo(() => {
                         changeTitleToDo={changeTitleToDo}/>
                 })}
             </div>
+            {/*{ !!error && <Alert variant="filled" severity="error">{error}</Alert>}*/}
+            <CustomizedSnackbars/>
         </div>
 
     );

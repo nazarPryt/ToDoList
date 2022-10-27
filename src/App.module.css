@@ -2,9 +2,11 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+
 }
 .contentWrapper > div {
   padding: 20px;
+
 }
 .createTodoWrapper {
   text-align: center;

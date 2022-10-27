@@ -1,5 +1,7 @@
 import {todoListAPI, ToDoListType} from "../api/todoListAPI";
 import {AppThunkType} from "./store";
+import {ChangeAppStatusAC, SetAppErrorAC} from "./app-reducer";
+import {AxiosError} from "axios";
 
 export type todolistActionType =
     | ReturnType<typeof changeTitleToDoAC>
@@ -42,33 +44,57 @@ export const setToDoListsAC = (ToDoLists: ToDoListType[]) => ({type: 'SET-TO-DO-
 ///////   Thunk     ///////
 export const fetchToDoListsTC = (): AppThunkType => async dispatch => {
     try {
+        dispatch(ChangeAppStatusAC('loading'))
         const res = await todoListAPI.getTodolist()
+
+        dispatch(ChangeAppStatusAC('succeed'))
         dispatch(setToDoListsAC(res.data))
+
     } catch (e) {
-        console.warn(e)
+        dispatch(ChangeAppStatusAC('failed'))
+        //@ts-ignore
+        dispatch(SetAppErrorAC(e.message))
     }
 }
 export const addNewTodoListTC = (title: string): AppThunkType => async dispatch => {
     try {
+        dispatch(ChangeAppStatusAC('loading'))
         const res = await todoListAPI.createNewToDoList(title)
-        dispatch(addNewTodoListAC(res.data.data.item))
+        if(res.data.resultCode === 0){
+            dispatch(ChangeAppStatusAC('succeed'))
+            dispatch(addNewTodoListAC(res.data.data.item))
+        } else {
+            if(res.data.messages.length){
+                dispatch(SetAppErrorAC(res.data.messages[0]))
+            } else {
+                dispatch(SetAppErrorAC('Some Error occurred!!'))
+            }
+            dispatch(ChangeAppStatusAC('failed'))
+        }
     } catch (e) {
+        dispatch(ChangeAppStatusAC('failed'))
         console.warn(e)
     }
 }
 export const deleteTodoListTC = (todolistID: string): AppThunkType => async dispatch => {
     try {
+        dispatch(ChangeAppStatusAC('loading'))
         const res = await todoListAPI.deleteTodoList(todolistID)
+        dispatch(ChangeAppStatusAC('succeed'))
         dispatch(deleteTodoListAC(todolistID))
     } catch (e) {
+        dispatch(ChangeAppStatusAC('failed'))
         console.warn(e)
     }
 }
 export const updateToDoListTC = (todoListID: string, title: string): AppThunkType => async dispatch => {
     try {
+        dispatch(ChangeAppStatusAC('loading'))
         const res = todoListAPI.updateToDoList(todoListID, title)
+        dispatch(ChangeAppStatusAC('succeed'))
         dispatch(changeTitleToDoAC(todoListID, title))
     } catch (e) {
+        dispatch(ChangeAppStatusAC('failed'))
         console.warn(e)
     }
 }
