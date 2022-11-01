@@ -69,6 +69,7 @@ const App = React.memo(() => {
                     // }
                     return <Todolist
                         key={tl.id}
+                        EntityStatus={status}
                         idTodo={tl.id}
                         title={tl.title}
                         taskObj={taskObj}

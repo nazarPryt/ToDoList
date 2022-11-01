@@ -1,7 +1,9 @@
 import {TaskPriorities, TaskStatuses, TaskType, todoListAPI, updateTaskModelType} from "../api/todoListAPI";
 import {AppThunkType} from "./store";
-import {addNewTodoListAC, deleteTodoListAC, setToDoListsAC} from "./todolist-reducer";
-import {ChangeAppStatusAC} from "./app-reducer";
+import {addNewTodoListAC, changeToDoListEntityStatusAC, deleteTodoListAC, setToDoListsAC} from "./todolist-reducer";
+import {ChangeAppStatusAC, SetAppErrorAC} from "./app-reducer";
+import {AxiosError} from "axios";
+import {HandleServerAppError, HandleServerNetworkError} from "../utils/error-utils";
 
 export type taskActionType =
     | ReturnType<typeof setToDoListsAC>
@@ -83,12 +85,18 @@ export const setTasksTC = (todoListID: string): AppThunkType => async dispatch =
 export const createNewTaskTC = (todoListID: string, title: string): AppThunkType => async dispatch => {
     try {
         dispatch(ChangeAppStatusAC('loading'))
+        dispatch(changeToDoListEntityStatusAC(todoListID, 'loading'))
         const res = await todoListAPI.createNewTask(todoListID, title)
+        if (res.data.resultCode === 0) {
+            dispatch(ChangeAppStatusAC('succeed'))
+            dispatch(createNewTaskAC(todoListID, res.data.data.item))
+        } else {
+            HandleServerAppError(dispatch, res.data)
+        }
         dispatch(ChangeAppStatusAC('succeed'))
-        dispatch(createNewTaskAC(todoListID, res.data.data.item))
     } catch (e) {
-        dispatch(ChangeAppStatusAC('failed'))
-        console.log(e)
+        const error = e as AxiosError | Error
+        HandleServerNetworkError(dispatch, error)
     }
 }
 export const deleteTaskTC = (todolistId: string, taskId: string): AppThunkType => async dispatch => {
@@ -98,8 +106,8 @@ export const deleteTaskTC = (todolistId: string, taskId: string): AppThunkType =
         dispatch(ChangeAppStatusAC('succeed'))
         dispatch(deleteTaskAC(todolistId, taskId))
     } catch (e) {
-        dispatch(ChangeAppStatusAC('failed'))
-        console.warn(e)
+        const error = e as AxiosError | Error
+        HandleServerNetworkError(dispatch, error)
     }
 }
 type updateDomainTaskModelType = {
@@ -115,6 +123,7 @@ export const updateTaskTC = (todolistId: string, taskId: string, model: updateDo
     async (dispatch, getState) => {
         const task = getState().task[todolistId].find(tas => tas.id === taskId)
         if (!task) {
+            SetAppErrorAC('can not find task !!!')
             throw new Error('can not find task !!!')
             return
         }
@@ -132,7 +141,8 @@ export const updateTaskTC = (todolistId: string, taskId: string, model: updateDo
             const res = await todoListAPI.updateTask(todolistId, taskId, TaskAPI)
             dispatch(updateTaskAC(todolistId, taskId, model))
         } catch (e) {
-            console.warn(e)
+            const error = e as AxiosError | Error
+            HandleServerNetworkError(dispatch, error)
         }
     }
 

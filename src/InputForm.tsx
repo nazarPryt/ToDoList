@@ -4,6 +4,7 @@ import s from "./App.module.css";
 
 type inputFormType = {
     addItem: (inputValue: string) => void
+    disabled?: boolean
 }
 
 const InputForm = React.memo((props: inputFormType) => {
@@ -27,8 +28,8 @@ const InputForm = React.memo((props: inputFormType) => {
 
     return (
         <div>
-            <input type="text" className={error ? s.error : ''} value={inputValue} onChange={onChangeHandler}/>
-            <button onClick={onClickHandler}>+</button>
+            <input type="text" className={error ? s.error : ''} value={inputValue} onChange={onChangeHandler} disabled={props.disabled}/>
+            <button onClick={onClickHandler} disabled={props.disabled}>+</button>
             {error && <div className={s.errorMessage}>Need to fill this line!!</div>}
         </div>
     );

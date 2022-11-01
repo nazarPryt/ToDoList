@@ -1,4 +1,4 @@
-type RequestStatusType = 'idle' | 'loading' | 'succeed' | 'failed'
+export type RequestStatusType = 'idle' | 'loading' | 'succeed' | 'failed'
 export type appReducerActionType =
     | ReturnType<typeof ChangeAppStatusAC>
     | ReturnType<typeof SetAppErrorAC>

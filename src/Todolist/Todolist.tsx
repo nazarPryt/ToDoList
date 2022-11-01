@@ -7,8 +7,10 @@ import {useAppDispatch} from "./hooks";
 import {createNewTaskTC, setTasksTC, taskObjType} from "./task-reducer";
 import Task from "../Task";
 import {TaskStatuses} from "../api/todoListAPI";
+import {RequestStatusType} from "./app-reducer";
 
 type TodolistType = {
+    EntityStatus: RequestStatusType
     idTodo: string
     title: string
     taskObj: taskObjType
@@ -53,9 +55,9 @@ const Todolist = React.memo((props: TodolistType) => {
         <div>
             <h1>
                 <EditableSpan title={props.title} changeValue={changeInputValueHandler}/>
-                <button onClick={deleteTodoListHandler}>X</button>
+                <button onClick={deleteTodoListHandler} disabled={props.EntityStatus === 'loading'}>X</button>
             </h1>
-            <InputForm addItem={createNewTaskHandler}/>
+            <InputForm addItem={createNewTaskHandler} disabled={props.EntityStatus === 'loading'}/>
             <ul>
                 {props.taskObj[props.idTodo] &&
                     props.taskObj[props.idTodo].map(el =>
