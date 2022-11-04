@@ -1,12 +1,12 @@
 import React, {useCallback, useEffect} from 'react';
-import s from '../App.module.css'
-import InputForm from "../InputForm";
-import EditableSpan from "../EditableSpan";
+import s from '../../pages/Home/Home.module.css'
+import InputForm from "../InputForm/InputForm";
+import EditableSpan from "../EditableSpan/EditableSpan";
 import {deleteTodoListTC, FilterType} from "./todolist-reducer";
-import {useAppDispatch} from "./hooks";
+import {useAppDispatch} from "../../store/hooks";
 import {createNewTaskTC, setTasksTC, taskObjType} from "./task-reducer";
-import Task from "../Task";
-import {TaskStatuses} from "../api/todoListAPI";
+import Task from "../Task/Task";
+import {TaskStatuses} from "../../api/todoListAPI";
 import {RequestStatusType} from "./app-reducer";
 
 type TodolistType = {
@@ -27,7 +27,7 @@ const Todolist = React.memo((props: TodolistType) => {
 
     useEffect(() => {
         dispatch(setTasksTC(props.idTodo))   ///  ok
-    }, [dispatch])
+    }, [dispatch, props.idTodo])
 
     const deleteTodoListHandler = useCallback(() => {
         dispatch(deleteTodoListTC(props.idTodo))
@@ -45,11 +45,11 @@ const Todolist = React.memo((props: TodolistType) => {
 
     const createNewTaskHandler = useCallback((inputValue: string) => {
         dispatch(createNewTaskTC(props.idTodo, inputValue))
-    }, [dispatch])
+    }, [dispatch, props.idTodo])
 
     const changeInputValueHandler = useCallback((value: string) => {
         props.changeTitleToDo(props.idTodo, value)
-    }, [props.changeTitleToDo])
+    }, [props.changeTitleToDo, props.idTodo])
 
     return (
         <div>

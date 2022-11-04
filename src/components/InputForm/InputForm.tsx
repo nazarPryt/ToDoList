@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useState} from 'react';
-import s from "./App.module.css";
+import s from "../../pages/Home/Home.module.css";
 
 
 type inputFormType = {

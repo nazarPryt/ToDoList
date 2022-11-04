@@ -1,9 +1,9 @@
-import {TaskPriorities, TaskStatuses, TaskType, todoListAPI, updateTaskModelType} from "../api/todoListAPI";
-import {AppThunkType} from "./store";
+import {TaskPriorities, TaskStatuses, TaskType, todoListAPI, updateTaskModelType} from "../../api/todoListAPI";
+import {AppThunkType} from "../../store/store";
 import {addNewTodoListAC, changeToDoListEntityStatusAC, deleteTodoListAC, setToDoListsAC} from "./todolist-reducer";
 import {ChangeAppStatusAC, SetAppErrorAC} from "./app-reducer";
 import {AxiosError} from "axios";
-import {HandleServerAppError, HandleServerNetworkError} from "../utils/error-utils";
+import {HandleServerAppError, HandleServerNetworkError} from "../../utils/error-utils";
 
 export type taskActionType =
     | ReturnType<typeof setToDoListsAC>
