@@ -1,4 +1,5 @@
 import axios from "axios";
+import {AxiosResponse} from "axios";
 
 const instance = axios.create({
     withCredentials: true,
@@ -14,21 +15,40 @@ export const todoListAPI = {
     deleteTodoList(todoListID: string) {
         return instance.delete<ResponseType>(`/todo-lists/${todoListID}`)},
     createNewToDoList(title: string) {
-        return instance.post<ResponseType<{item: ToDoListType}>>(`/todo-lists`,{title})},
+        return instance.post<AxiosResponse<ResponseType<{item: ToDoListType}>>>(`/todo-lists`,{title})},
     updateToDoList (todoListID: string, title: string) {
-        return instance.put(`/todo-lists/${todoListID}`,{title})},
+        return instance.put<{title: string}, AxiosResponse<ResponseType>>(`/todo-lists/${todoListID}`,{title})},
     getTasks(todoListID: string) {
         return instance.get<GetTasksResponseType>(`/todo-lists/${todoListID}/tasks`)},
     createNewTask(todoListID: string, title: string) {
-        return instance.post<TaskResponseType<{item: TaskType}>>(`/todo-lists/${todoListID}/tasks`, {title})},
+        return instance.post<{title: string}, AxiosResponse<TaskResponseType<{item: TaskType}>>>(`/todo-lists/${todoListID}/tasks`, {title})},
     deleteTask(todolistId: string, taskId: string) {
         return instance.delete<TaskResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)},
     updateTask(todolistId: string, taskId: string, model: updateTaskModelType) {
-        return instance.put<ResponseType<{item: TaskType}>>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
+        return instance.put<updateTaskModelType, AxiosResponse<ResponseType<{item: TaskType}>>>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
+    }
+}
+export const authAPI = {
+    login(data: authDataRequestType){
+        return instance.post<authDataRequestType, AxiosResponse<ResponseType<{userId: number}>>>('/auth/login', data)
+    },
+    me(){
+        return instance.get<ResponseType<{id: number, email: string, login: string}>>('/auth/me')
+    },
+    logOut(userId: number){
+        return axios.delete<ResponseType>('https://social-network.samuraijs.com/api/1.1/auth/login')
     }
 }
 
 
+
+///////   auth Types     ///////
+export type authDataRequestType = {
+    email: string
+    password: string
+    rememberMe?: boolean
+    captcha?: string
+}
 ///////   ToDoLists Types     ///////
 export type ToDoListType = {
     id: string

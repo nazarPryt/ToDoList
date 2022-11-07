@@ -13,9 +13,10 @@ import {
     updateToDoListTC
 } from "../../components/Todolist/todolist-reducer";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import {Navigate} from "react-router-dom";
 
 const Home = () => {
-
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
     const toDoLists = useAppSelector(state => state.toDoList)
     const taskObj = useAppSelector(state => state.task)
     const dispatch = useAppDispatch()
@@ -23,6 +24,9 @@ const Home = () => {
     // const error = useAppSelector(state => state.app.error)
 
     useEffect(() => {
+        if(!isLoggedIn){
+            return
+        }
         dispatch(fetchToDoListsTC()) //  ok
     }, [dispatch])
 
@@ -46,6 +50,9 @@ const Home = () => {
     }, [dispatch])
 
 
+    if (!isLoggedIn) {
+        return <Navigate to={'/login'}/>
+    }
     return (
         <div className={s.app}>
             <div className={s.createTodoWrapper}>

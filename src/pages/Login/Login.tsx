@@ -2,8 +2,16 @@ import React from 'react';
 import s from './Login.module.css'
 import * as Yup from 'yup';
 import {useFormik} from "formik";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import {Navigate} from "react-router-dom";
+import {setAuthorizationTC} from "../../auth/authReducer";
+import LinearProgress from "@mui/material/LinearProgress";
+import {CustomizedSnackbars} from "../../components/ErrorSnackBar/ErrorSnackBar";
 
 const Login = () => {
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    const status = useAppSelector(state => state.app.status)
+    const dispatch = useAppDispatch()
 
     const formik = useFormik({
         initialValues: {
@@ -21,15 +29,19 @@ const Login = () => {
                 .required('Required'),
         }),
         onSubmit: value => {
-            alert(JSON.stringify(value, null, 2));
+            dispatch(setAuthorizationTC(value))
+            formik.resetForm()
         }
     })
-
+    if (isLoggedIn) {
+        return <Navigate to={'/'}/>
+    }
 
     return (
         <div className={s.Wrapper}>
             <div className={s.formWrap}>
                 <h2>Login</h2>
+                {status === "loading" && <LinearProgress/>}
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, laboriosam! Lorem ipsum dolor
                     sit amet, consectetur adipisicing elit. Eius eum eveniet excepturi harum in praesentium provident
                     quidem quo quos vel.</p>
@@ -52,6 +64,7 @@ const Login = () => {
                     </div>
                 </form>
             </div>
+            <CustomizedSnackbars/>
         </div>
     );
 };

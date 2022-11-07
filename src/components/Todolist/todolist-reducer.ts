@@ -70,11 +70,11 @@ export const addNewTodoListTC = (title: string): AppThunkType => async dispatch 
     try {
         dispatch(ChangeAppStatusAC('loading'))
         const res = await todoListAPI.createNewToDoList(title)
-        if (res.data.resultCode === 0) {
+        if (res.data.data.resultCode === 0) {
             dispatch(ChangeAppStatusAC('succeed'))
-            dispatch(addNewTodoListAC(res.data.data.item))
+            dispatch(addNewTodoListAC(res.data.data.data.item))
         } else {
-            HandleServerAppError(dispatch, res.data)
+            HandleServerAppError(dispatch, res.data.data)
         }
     } catch (e) {
         const error = e as AxiosError | Error
