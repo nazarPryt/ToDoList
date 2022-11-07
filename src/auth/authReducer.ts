@@ -1,15 +1,18 @@
 import {AppThunkType} from "../store/store";
-import {ChangeAppStatusAC} from "../components/Todolist/app-reducer";
+import {ChangeAppStatusAC, IsInitializedAC} from "../components/Todolist/app-reducer";
 import {HandleServerAppError, HandleServerNetworkError} from "../utils/error-utils";
 import {AxiosError} from "axios";
-import {authAPI, authDataRequestType} from "../api/todoListAPI";
+import {authAPI, authDataRequestType} from "../api/authAPI";
+
 
 type authStateType = typeof authInitialState
 
 const authInitialState = {
-    isLoggedIn: false
+    isLoggedIn: false,
 }
-export type authReducerActionType = ReturnType<typeof setIsLoggedInAC>
+export type authReducerActionType =
+    | ReturnType<typeof setIsLoggedInAC>
+
 
 export const authReducer = (state: authStateType = authInitialState, action: authReducerActionType): authStateType => {
     switch (action.type) {
@@ -22,11 +25,10 @@ export const authReducer = (state: authStateType = authInitialState, action: aut
 }
 
 ///////////  Actions  //////////
-const setIsLoggedInAC = (value: boolean) => ({type: 'AUTH-REDUCER/SET-LOGGED-IN', value})
-
+export const setIsLoggedInAC = (value: boolean) => ({type: 'AUTH-REDUCER/SET-LOGGED-IN' as const, value})
 
 ///////////  Thunks  //////////
-export const setAuthorizationTC = (data: authDataRequestType): AppThunkType => async dispatch => {
+export const loginTC = (data: authDataRequestType): AppThunkType => async dispatch => {
     try {
         dispatch(ChangeAppStatusAC('loading'))
         const res = await authAPI.login(data)
@@ -36,25 +38,11 @@ export const setAuthorizationTC = (data: authDataRequestType): AppThunkType => a
         } else {
             HandleServerAppError(dispatch, res.data)
         }
-        dispatch(ChangeAppStatusAC('succeed'))
+        dispatch(ChangeAppStatusAC('failed'))
     } catch (e) {
         const error = e as AxiosError | Error
         HandleServerNetworkError(dispatch, error)
     }
-}
-export const initializeAppTC = (): AppThunkType => async dispatch => {
-    try {
-        const res = await authAPI.me()
-        if (res.data.resultCode === 0) {
-            dispatch(setIsLoggedInAC(true))
-        } else {
-            HandleServerAppError(dispatch, res.data)
-        }
-    } catch (e) {
-        const error = e as AxiosError | Error
-        HandleServerNetworkError(dispatch, error)
-    }
-
 }
 
 ///////////  Types  //////////

@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import {useFormik} from "formik";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {Navigate} from "react-router-dom";
-import {setAuthorizationTC} from "../../auth/authReducer";
+import {loginTC} from "../../auth/authReducer";
 import LinearProgress from "@mui/material/LinearProgress";
 import {CustomizedSnackbars} from "../../components/ErrorSnackBar/ErrorSnackBar";
 
@@ -12,6 +12,7 @@ const Login = () => {
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
     const status = useAppSelector(state => state.app.status)
     const dispatch = useAppDispatch()
+
 
     const formik = useFormik({
         initialValues: {
@@ -29,7 +30,7 @@ const Login = () => {
                 .required('Required'),
         }),
         onSubmit: value => {
-            dispatch(setAuthorizationTC(value))
+            dispatch(loginTC(value))
             formik.resetForm()
         }
     })
