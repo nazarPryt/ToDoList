@@ -2,9 +2,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 71px);
-    background: url("../../assets/img/loginPageBg.jpg") center no-repeat ;
-    background-size: cover;
 }
 .formWrap {
     display: flex;

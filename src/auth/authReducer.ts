@@ -44,6 +44,22 @@ export const loginTC = (data: authDataRequestType): AppThunkType => async dispat
         HandleServerNetworkError(dispatch, error)
     }
 }
+export const logOutTC = (): AppThunkType => async dispatch => {
+    try {
+        dispatch(ChangeAppStatusAC('loading'))
+        const res = await authAPI.logOut()
+        if (res.data.resultCode === 0) {
+            dispatch(setIsLoggedInAC(false))
+            dispatch(ChangeAppStatusAC('succeed'))
+        } else {
+            HandleServerAppError(dispatch, res.data)
+        }
+        dispatch(ChangeAppStatusAC('failed'))
+    } catch (e) {
+        const error = e as AxiosError | Error
+        HandleServerNetworkError(dispatch, error)
+    }
+}
 
 ///////////  Types  //////////
 

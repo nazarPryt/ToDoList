@@ -6,7 +6,6 @@ import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {Navigate} from "react-router-dom";
 import {loginTC} from "../../auth/authReducer";
 import LinearProgress from "@mui/material/LinearProgress";
-import {CustomizedSnackbars} from "../../components/ErrorSnackBar/ErrorSnackBar";
 
 const Login = () => {
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
@@ -65,7 +64,6 @@ const Login = () => {
                     </div>
                 </form>
             </div>
-            <CustomizedSnackbars/>
         </div>
     );
 };

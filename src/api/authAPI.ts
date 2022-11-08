@@ -16,8 +16,8 @@ export const authAPI = {
     me() {
         return instance.get<ResponseType<{ id: number, email: string, login: string }>>('/auth/me')
     },
-    logOut(userId: number) {
-        return axios.delete<ResponseType>('/auth/login')
+    logOut() {
+        return instance.delete<ResponseType>('/auth/login')
     }
 }
 ///////   auth Types     ///////

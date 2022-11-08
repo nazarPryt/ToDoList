@@ -43,8 +43,6 @@ export const SetAppErrorAC = (message: string | null) => ({type: 'appReducer/SET
 export const IsInitializedAC = (value: boolean) => ({type: 'AUTH-REDUCER/SET-INITIALIZED' as const, value})
 
 
-
-
 export const initializeAppTC = (): AppThunkType => async dispatch => {
     try {
         const res = await authAPI.me()
@@ -52,11 +50,13 @@ export const initializeAppTC = (): AppThunkType => async dispatch => {
             dispatch(setIsLoggedInAC(true))
             dispatch(IsInitializedAC(true))
         } else {
-        HandleServerAppError(dispatch, res.data)
+            HandleServerAppError(dispatch, res.data)
+            dispatch(IsInitializedAC(true))
         }
     } catch (e) {
         const error = e as AxiosError | Error
         HandleServerNetworkError(dispatch, error)
+        dispatch(IsInitializedAC(true))
     }
 
 }
