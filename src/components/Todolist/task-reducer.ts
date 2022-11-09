@@ -73,27 +73,27 @@ export const updateTaskAC = (todolistId: string, taskId: string, model: updateDo
 ///////   Thunk     ///////
 export const setTasksTC = (todoListID: string): AppThunkType => async dispatch => {
     try {
-        dispatch(ChangeAppStatusAC('loading'))
+        dispatch(ChangeAppStatusAC({status: 'loading'}))
         const res = await todoListAPI.getTasks(todoListID)
-        dispatch(ChangeAppStatusAC('succeed'))
+        dispatch(ChangeAppStatusAC({status: 'succeed'}))
         dispatch(setTasksAC(res.data.items, todoListID))
     } catch (e) {
-        dispatch(ChangeAppStatusAC('failed'))
+        dispatch(ChangeAppStatusAC({status: 'failed'}))
         console.warn(e)
     }
 }
 export const createNewTaskTC = (todoListID: string, title: string): AppThunkType => async dispatch => {
     try {
-        dispatch(ChangeAppStatusAC('loading'))
+        dispatch(ChangeAppStatusAC({status: 'loading'}))
         dispatch(changeToDoListEntityStatusAC(todoListID, 'loading'))
         const res = await todoListAPI.createNewTask(todoListID, title)
         if (res.data.resultCode === 0) {
-            dispatch(ChangeAppStatusAC('succeed'))
+            dispatch(ChangeAppStatusAC({status: 'succeed'}))
             dispatch(createNewTaskAC(todoListID, res.data.data.item))
         } else {
             HandleServerAppError(dispatch, res.data)
         }
-        dispatch(ChangeAppStatusAC('succeed'))
+        dispatch(ChangeAppStatusAC({status: 'succeed'}))
     } catch (e) {
         const error = e as AxiosError | Error
         HandleServerNetworkError(dispatch, error)
@@ -101,9 +101,9 @@ export const createNewTaskTC = (todoListID: string, title: string): AppThunkType
 }
 export const deleteTaskTC = (todolistId: string, taskId: string): AppThunkType => async dispatch => {
     try {
-        dispatch(ChangeAppStatusAC('loading'))
+        dispatch(ChangeAppStatusAC({status: 'loading'}))
         const res = await todoListAPI.deleteTask(todolistId, taskId)
-        dispatch(ChangeAppStatusAC('succeed'))
+        dispatch(ChangeAppStatusAC({status: 'succeed'}))
         dispatch(deleteTaskAC(todolistId, taskId))
     } catch (e) {
         const error = e as AxiosError | Error
@@ -123,7 +123,7 @@ export const updateTaskTC = (todolistId: string, taskId: string, model: updateDo
     async (dispatch, getState) => {
         const task = getState().task[todolistId].find(tas => tas.id === taskId)
         if (!task) {
-            SetAppErrorAC('can not find task !!!')
+            SetAppErrorAC({message: 'can not find task !!!'})
             throw new Error('can not find task !!!')
             return
         }

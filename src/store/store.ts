@@ -1,10 +1,10 @@
-import {applyMiddleware, combineReducers} from "redux";
+import {combineReducers} from "redux";
 import {taskActionType, taskReducer} from "../components/Todolist/task-reducer";
 import {todolistActionType, todolistReducer} from "../components/Todolist/todolist-reducer";
-import { legacy_createStore as createStore} from 'redux'
 import thunk, {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {appReducer, appReducerActionType} from "../components/Todolist/app-reducer";
 import {authReducer, authReducerActionType} from "../auth/authReducer";
+import {configureStore} from "@reduxjs/toolkit";
 
 const rootReducer = combineReducers({
     app: appReducer,
@@ -13,7 +13,10 @@ const rootReducer = combineReducers({
     auth: authReducer,
 })
 
-export const store = createStore(rootReducer, applyMiddleware(thunk))
+export const store = configureStore({
+    reducer: rootReducer,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(thunk)
+})
 
 export type rootReducerType = ReturnType<typeof rootReducer>
 export type AppActionsType = taskActionType | todolistActionType | appReducerActionType | authReducerActionType

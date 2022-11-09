@@ -1,11 +1,9 @@
 import {AppThunkType} from "../store/store";
-import {ChangeAppStatusAC, IsInitializedAC} from "../components/Todolist/app-reducer";
+import {ChangeAppStatusAC} from "../components/Todolist/app-reducer";
 import {HandleServerAppError, HandleServerNetworkError} from "../utils/error-utils";
 import {AxiosError} from "axios";
 import {authAPI, authDataRequestType} from "../api/authAPI";
-
-
-type authStateType = typeof authInitialState
+import {createSlice} from "@reduxjs/toolkit";
 
 const authInitialState = {
     isLoggedIn: false,
@@ -13,32 +11,31 @@ const authInitialState = {
 export type authReducerActionType =
     | ReturnType<typeof setIsLoggedInAC>
 
-
-export const authReducer = (state: authStateType = authInitialState, action: authReducerActionType): authStateType => {
-    switch (action.type) {
-        case "AUTH-REDUCER/SET-LOGGED-IN":
-            return {...state, isLoggedIn: action.value}
-
-        default:
-            return state
+const auth = createSlice({
+    name: 'auth',
+    initialState: authInitialState,
+    reducers: {
+        setIsLoggedInAC: (state, action) => {
+            state.isLoggedIn = action.payload
+        }
     }
-}
+})
+export const authReducer = auth.reducer
+export const {setIsLoggedInAC} = auth.actions
 
-///////////  Actions  //////////
-export const setIsLoggedInAC = (value: boolean) => ({type: 'AUTH-REDUCER/SET-LOGGED-IN' as const, value})
 
 ///////////  Thunks  //////////
 export const loginTC = (data: authDataRequestType): AppThunkType => async dispatch => {
     try {
-        dispatch(ChangeAppStatusAC('loading'))
+        dispatch(ChangeAppStatusAC({status: 'loading'}))
         const res = await authAPI.login(data)
         if (res.data.resultCode === 0) {
             dispatch(setIsLoggedInAC(true))
-            dispatch(ChangeAppStatusAC('succeed'))
+            dispatch(ChangeAppStatusAC({status: 'succeed'}))
         } else {
             HandleServerAppError(dispatch, res.data)
         }
-        dispatch(ChangeAppStatusAC('failed'))
+        dispatch(ChangeAppStatusAC({status: 'failed'}))
     } catch (e) {
         const error = e as AxiosError | Error
         HandleServerNetworkError(dispatch, error)
@@ -46,20 +43,19 @@ export const loginTC = (data: authDataRequestType): AppThunkType => async dispat
 }
 export const logOutTC = (): AppThunkType => async dispatch => {
     try {
-        dispatch(ChangeAppStatusAC('loading'))
+        dispatch(ChangeAppStatusAC({status: 'loading'}))
         const res = await authAPI.logOut()
         if (res.data.resultCode === 0) {
             dispatch(setIsLoggedInAC(false))
-            dispatch(ChangeAppStatusAC('succeed'))
+            dispatch(ChangeAppStatusAC({status: 'succeed'}))
         } else {
             HandleServerAppError(dispatch, res.data)
         }
-        dispatch(ChangeAppStatusAC('failed'))
+        dispatch(ChangeAppStatusAC({status: 'failed'}))
     } catch (e) {
         const error = e as AxiosError | Error
         HandleServerNetworkError(dispatch, error)
     }
 }
 
-///////////  Types  //////////
 
