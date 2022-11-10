@@ -37,7 +37,7 @@ const Home = () => {
         dispatch(updateTaskTC(todolistId, taskId, {status}))
     }, [dispatch])
     const changeFilter = useCallback((idTodo: string, value: FilterType) => {
-        dispatch(changeFilterTaskAC(idTodo, value))
+        dispatch(changeFilterTaskAC({idTodo, value}))
     }, [dispatch])
     const addNewToDoList = useCallback((inputValue: string) => {
         dispatch(addNewTodoListTC(inputValue))
