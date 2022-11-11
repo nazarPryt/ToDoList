@@ -33,7 +33,7 @@ const todolistSlice = createSlice({
 
         },
         setToDoListsAC (state, action: PayloadAction<{ToDoLists: ToDoListType[]}>) {
-
+            return action.payload.ToDoLists.map(todolist => ({...todolist, filter: 'all', EntityStatus: 'idle'}))
         },
         changeToDoListEntityStatusAC (state, action: PayloadAction<{todoListID: string, status: RequestStatusType}>) {
 

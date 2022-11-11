@@ -26,27 +26,35 @@ export const taskSlice = createSlice({
     initialState,
     reducers: {
         deleteTaskAC (state, action: PayloadAction<{todolistId: string, taskId: string}>) {
-
+            const tasks = state[action.payload.todolistId];
+            const index = state[action.payload.todolistId].findIndex(task => task.id === action.payload.taskId)
+            if(index > -1){
+                tasks.splice(index, 1)
+            }
         },
         createNewTaskAC (state, action: PayloadAction<{todoListID: string, task: TaskType}>) {
-
+            state[action.payload.todoListID].unshift(action.payload.task)
         },
         setTasksAC (state, action: PayloadAction<{tasks: TaskType[], todoListID: string}>) {
-
+            state[action.payload.todoListID] = action.payload.tasks
         },
         updateTaskAC (state, action: PayloadAction<{todolistId: string, taskId: string, model: updateDomainTaskModelType}>) {
-
+            const tasks = state[action.payload.todolistId]
+            const index = state[action.payload.todolistId].findIndex(task => task.id === action.payload.taskId)
+            if(index > -1){
+                tasks[index] = {...tasks[index], ...action.payload.model}
+            }
         }
     },
     extraReducers: builder => {
         builder.addCase(addNewTodoListAC, (state,action) => {
-
+            state[action.payload.toDoList.id] = []
             });
         builder.addCase(setToDoListsAC, (state, action) => {
-
+            action.payload.ToDoLists.forEach(todolist => {state[todolist.id] = []})
         });
         builder.addCase(deleteTodoListAC, (state, action) => {
-
+            delete state[action.payload.idTodo]
         })
     }
 })
@@ -120,8 +128,8 @@ export const deleteTaskTC = (todolistId: string, taskId: string): AppThunkType =
     try {
         dispatch(ChangeAppStatusAC({status: 'loading'}))
         const res = await todoListAPI.deleteTask(todolistId, taskId)
-        dispatch(ChangeAppStatusAC({status: 'succeed'}))
         dispatch(deleteTaskAC({todolistId, taskId}))
+        dispatch(ChangeAppStatusAC({status: 'succeed'}))
     } catch (e) {
         const error = e as AxiosError | Error
         HandleServerNetworkError(dispatch, error)
