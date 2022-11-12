@@ -150,7 +150,6 @@ export const updateTaskTC = (todolistId: string, taskId: string, model: updateDo
         if (!task) {
             SetAppErrorAC({message: 'can not find task !!!'})
             throw new Error('can not find task !!!')
-            return
         }
         const TaskAPI: updateTaskModelType = {
             completed: task.completed,
